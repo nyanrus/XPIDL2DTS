@@ -57,20 +57,37 @@ function preprocess(src: string): string {
         _index = idx_end;
       }
     }
-    //* paren to oneline
+    //* flat base on paren
     {
       let _index = 0;
       while (true) {
         const start_paren = src.indexOf("(", _index);
-
-        const end_paren = src.indexOf(")", start_paren);
-        if (start_paren === -1 || end_paren === -1) {
+        if (start_paren === -1) {
           break;
         }
+        const end_paren = src.indexOf(")", start_paren);
+
         //console.log(`${start_paren} : ${end_paren}`);
         src = src.slice(0, start_paren) + src.slice(start_paren, end_paren).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(end_paren);
         const end_paren_re = src.indexOf(")", start_paren);
         _index = end_paren_re;
+      }
+    }
+    //* flat cenum
+    {
+      let _index = 0;
+      while (true) {
+        const idx_cenum = src.indexOf("cenum", _index);
+        if (idx_cenum === -1) {
+          break;
+        }
+        const idx_end_semiparen = src.indexOf("}", idx_cenum);
+        const idx_start = idx_cenum;
+        const idx_end = idx_end_semiparen;
+        //console.log(`${start_paren} : ${end_paren}`);
+        src = src.slice(0, idx_start) + src.slice(idx_start, idx_end).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(idx_end);
+        const idx_end_re = src.indexOf(")", idx_start);
+        _index = idx_end_re;
       }
     }
   }
@@ -516,7 +533,11 @@ function process(src: string): string {
 
 function processAll4Test(root: string) {
   fs.readdirSync(root, { recursive: true, encoding: "utf-8" }).forEach((_file) => {
-    if (!fs.statSync(root + _file).isDirectory() && _file.endsWith(".idl") && _file.includes("nsIMemoryReporter")) {
+    if (
+      !fs.statSync(root + _file).isDirectory() &&
+      _file.endsWith(".idl")
+      //&& _file.includes("nsIMemoryReporter")
+    ) {
       console.log(root + _file);
       const src = fs.readFileSync(root + _file).toString();
       const preprocessed = preprocess(src);
