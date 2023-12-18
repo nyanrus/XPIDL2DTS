@@ -1,8 +1,6 @@
 import * as fs from "fs";
 
 /**
- * REMOVE C++ Codes from IDL
- * that not used in JS
  * @param src Source Code to process
  * @returns Processed String
  */
@@ -10,38 +8,76 @@ function preprocess(src: string): string {
   //* REMOVE C++ Codes
   {
     src = src.replaceAll(/%{[\s\S]*?%}/g, "");
-    const fd = fs.openSync("dst.d.ts", "w");
-
-    fs.writeSync(fd, Buffer.from(src, "utf-8"));
   }
 
-  //* REMOVE function newline
+  //* remove indent
   {
-    let buf = "";
-    let pat_open = false;
-    let before_is_space = false;
-    for (let i = 0; i < src.length; i++) {
-      if (src.charAt(i) === "(") {
-        pat_open = true;
-      } else if (src.charAt(i) === ")") {
-        pat_open = false;
-      }
-      if (pat_open) {
-        if (!before_is_space) {
-          buf += src.charAt(i);
-        }
-      } else {
-        buf += src.charAt(i);
-      }
-      before_is_space = src.charAt(i).trim() === " ";
-    }
-    src = buf;
+    src = src
+      .split("\n")
+      .map((v) => {
+        return v.trimStart();
+      })
+      .join("\n");
+  }
+
+  //* include to comment
+  {
+    src = src.replaceAll("#include", "//#include");
+  }
+
+  //* move interface attribute interface line
+  {
+    src = src.replaceAll(/]\n/g, "] ");
   }
 
   //* move { to interface line
   {
     src = src.replaceAll(/\n{/g, " {");
   }
+  //* flatten
+  {
+    //* remove multiple empty line
+    src = src.replaceAll(/\n[\n]+/g, "\n\n");
+
+    //* flat base on `;`(function) or `{`(interface)
+    {
+      let _index = 0;
+      while (true) {
+        const idx_end_multicomment = src.indexOf("*/", _index);
+        if (idx_end_multicomment === -1) {
+          break;
+        }
+        const idx_semicolon = src.indexOf(";", idx_end_multicomment);
+        const idx_semiparen = src.indexOf("{", idx_end_multicomment);
+
+        const idx_end = idx_semicolon > idx_semiparen ? idx_semicolon : idx_semiparen;
+        const idx_start = src.lastIndexOf("*/", idx_end) + 2;
+
+        src = src.slice(0, idx_start) + "\n" + src.slice(idx_start, idx_end).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(idx_end);
+        _index = idx_end;
+      }
+    }
+    //* paren to oneline
+    {
+      let _index = 0;
+      while (true) {
+        const start_paren = src.indexOf("(", _index);
+
+        const end_paren = src.indexOf(")", start_paren);
+        if (start_paren === -1 || end_paren === -1) {
+          break;
+        }
+        //console.log(`${start_paren} : ${end_paren}`);
+        src = src.slice(0, start_paren) + src.slice(start_paren, end_paren).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(end_paren);
+        const end_paren_re = src.indexOf(")", start_paren);
+        _index = end_paren_re;
+      }
+    }
+  }
+
+  const fd = fs.openSync("dst.d.ts", "w");
+
+  fs.writeSync(fd, Buffer.from(src, "utf-8"));
   return src;
 }
 
@@ -452,10 +488,29 @@ function processLine(line: string): string {
 
 function process(src: string): string {
   let buf = "";
-  for (const i of src.split("\n")) {
-    //console.log(i);
-    buf += processLine(i);
+  let index = 0;
+  while (false) {
+    //* MULTICOMMENT
+    if (src.startsWith("/*", index)) {
+      const idx_end_multicomment = src.indexOf("*/", index);
+      buf += src.slice(index, idx_end_multicomment);
+      src = src.slice(idx_end_multicomment);
+      index = idx_end_multicomment;
+    } else if (src.startsWith("//", index)) {
+      const idx_next_newline = src.indexOf("\n", index);
+      buf += src.slice(index, idx_next_newline);
+      src = src.slice(idx_next_newline);
+      index = idx_next_newline;
+    }
   }
+  {
+    buf = src;
+  }
+
+  // for (const i of src.split("\n")) {
+  //   //console.log(i);
+  //   buf += processLine(i);
+  // }
   return buf;
 }
 
@@ -480,14 +535,7 @@ function processAll4Test(root: string) {
 }
 
 function main() {
-  //src: string
   processAll4Test("../nyanrus_Floorp/xpcom/");
-  // const preprocessed = preprocess(src);
-  // const processed = process(preprocessed);
-  // const fd = fs.openSync("dst.d.ts", "w");
-
-  // fs.writeSync(fd, Buffer.from(processed, "utf-8"));
 }
 
 main();
-//fs.readFileSync("src.idl").toString()
