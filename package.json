@@ -8,7 +8,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MPL2.0",
   "devDependencies": {
     "@types/node": "^20.10.4"
   },
