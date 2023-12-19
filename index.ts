@@ -1,320 +1,161 @@
 import * as fs from "fs";
+import { IDLType2TS } from "./idltype";
+import { preprocess } from "./preprocess";
+import { Attribute } from "./defines";
 
 /**
- * @param src Source Code to process
- * @returns Processed String
+ * in interface parse
+ * `[ATTR] [readonly] attribute [TYPE] [NAME];`
+ * to `//PROPERTY [ATTR]\n [readonly] name:type,`
+ * @param line line of source
+ * @param attr Attribute in this line.
+ * if attr contains noscript, return just COMMENT
+ * @returns processed line
  */
-function preprocess(src: string): string {
-  //* REMOVE C++ Codes
-  {
-    src = src.replaceAll(/%{[\s\S]*?%}/g, "");
+function processProperty(line: string, attr: Attribute | null): string {
+  const tokens = line.split(" ");
+  let index = 0;
+
+  let readonly = false;
+  let type: string;
+  let name: string;
+  if (attr?.values.includes("noscript")) {
+    return `///NOSCRIPT ${line}`;
   }
-
-  //* remove indent
+  //* [readonly]
   {
-    src = src
-      .split("\n")
-      .map((v) => {
-        return v.trimStart();
-      })
-      .join("\n");
+    readonly = tokens[index] === "readonly";
+    if (readonly) index += 1;
   }
-
-  //* include to comment
+  //* attribute
   {
-    src = src.replaceAll("#include", "//#include");
+    if (!(tokens[index] === "attribute")) throw Error("this is not property!");
+    index += 1;
   }
-
-  //* move interface attribute interface line
+  //* [TYPE]
   {
-    src = src.replaceAll(/]\n/g, "] ");
+    type = IDLType2TS(tokens[index]);
+    index += 1;
   }
-
-  //* move { to interface line
+  //* [NAME]
   {
-    src = src.replaceAll(/\n{/g, " {");
+    name = tokens[index].replace(";", "");
   }
-  //* flatten
+  //`//PROPERTY [ATTR]\n [readonly] name:type,`
+  return `${attr ? `//PROPERTY ${attr.toLine()}\n` : ""}${readonly ? "readonly " : ""}${name}:${type},`;
+}
+
+/**
+ *
+ * @param raw_args
+ * @return [args, retval?]
+ */
+function processFuncArgs(raw_args: string): [string, string | null] {
+  let arr_args: string[] = [];
+  //* split to tokens
   {
-    //* remove multiple empty line
-    src = src.replaceAll(/\n[\n]+/g, "\n\n");
-
-    //* flat base on `;`(function) or `{`(interface)
-    {
-      let _index = 0;
-      while (true) {
-        const idx_end_multicomment = src.indexOf("*/", _index);
-        if (idx_end_multicomment === -1) {
-          break;
-        }
-        const idx_semicolon = src.indexOf(";", idx_end_multicomment);
-        const idx_semiparen = src.indexOf("{", idx_end_multicomment);
-
-        const idx_end = idx_semicolon > idx_semiparen ? idx_semicolon : idx_semiparen;
-        const idx_start = src.lastIndexOf("*/", idx_end) + 2;
-
-        src = src.slice(0, idx_start) + "\n" + src.slice(idx_start, idx_end).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(idx_end);
-        _index = idx_end;
+    console.log("split token");
+    let index = 0;
+    while (index < raw_args.length) {
+      let _buf = "";
+      if (raw_args.startsWith("[", index)) {
+        const idx_end_square_bracket = raw_args.indexOf("]", index) + 1;
+        _buf += raw_args.slice(index, idx_end_square_bracket);
+        index = idx_end_square_bracket;
+      }
+      const idx_comma = raw_args.indexOf(",", index) + 1;
+      console.log(`idx_comma : ${idx_comma}`);
+      if (idx_comma === 0) {
+        arr_args.push(raw_args);
+        break;
+      }
+      _buf += raw_args.slice(index, idx_comma);
+      index = idx_comma;
+      arr_args.push(_buf);
+      //* remove whitespace after comma
+      while (raw_args[index] === " ") {
+        index += 1;
       }
     }
-    //* flat base on paren
+    console.log("split end");
+  }
+  let ret_type_retval: string | null = null;
+  let ret_args = [];
+  for (const elem of arr_args) {
+    let _attribute: Attribute | null;
+    let _elem: string;
+    //* attribute
     {
-      let _index = 0;
-      while (true) {
-        const start_paren = src.indexOf("(", _index);
-        if (start_paren === -1) {
-          break;
-        }
-        const end_paren = src.indexOf(")", start_paren);
-
-        //console.log(`${start_paren} : ${end_paren}`);
-        src = src.slice(0, start_paren) + src.slice(start_paren, end_paren).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(end_paren);
-        const end_paren_re = src.indexOf(")", start_paren);
-        _index = end_paren_re;
+      if (elem.startsWith("[")) {
+        [_attribute, _elem] = Attribute.fromLine(elem);
+      } else {
+        _attribute = null;
+        _elem = elem;
       }
     }
-    //* flat cenum
+
+    let index = 0;
+    const tokens = _elem.split(" ");
+    let type: string;
+    let name: string;
+
+    //* `in` or `out`
     {
-      let _index = 0;
-      while (true) {
-        const idx_cenum = src.indexOf("cenum", _index);
-        if (idx_cenum === -1) {
-          break;
-        }
-        const idx_end_semiparen = src.indexOf("}", idx_cenum);
-        const idx_start = idx_cenum;
-        const idx_end = idx_end_semiparen;
-        //console.log(`${start_paren} : ${end_paren}`);
-        src = src.slice(0, idx_start) + src.slice(idx_start, idx_end).replaceAll(/[ ]+/g, " ").replaceAll("\n", "") + src.slice(idx_end);
-        const idx_end_re = src.indexOf(")", idx_start);
-        _index = idx_end_re;
-      }
+      if (!(tokens[index] === "in" || tokens[index] === "out")) throw Error("function args not starts with `in` or `out`");
+      index += 1;
     }
-  }
+    //* [TYPE]
+    {
+      type = IDLType2TS(tokens[index]);
+      index += 1;
+    }
+    //* [NAME]
+    {
+      name = tokens[index];
+      index += 1;
+    }
 
-  const fd = fs.openSync("dst.d.ts", "w");
-
-  fs.writeSync(fd, Buffer.from(src, "utf-8"));
-  return src;
-}
-
-enum Status {
-  NORMAL,
-  MULTI_COMMENT,
-  INTERFACE,
-  FUNCTION,
-}
-
-interface Attribute {
-  values: string[];
-  newline: boolean;
-}
-
-function IDLType2TS(str: string): string {
-  const n = "number";
-  const s = "string";
-  //const i = "ID object";
-  const i = "any";
-
-  //https://firefox-source-docs.mozilla.org/xpcom/xpidl.html
-  const map: Map<string, string> = new Map(
-    Object.entries({
-      boolean: "boolean",
-      char: s,
-      double: n,
-      float: n,
-      long: n,
-      "long long": n,
-      octet: n,
-      short: n,
-      string: n,
-      "unsigned long": n,
-      "unsigned long long": n,
-      "unsigned short": n,
-      //? START
-      uint32_t: n,
-      uint64_t: n,
-      int32_t: n,
-      bool: "boolean",
-      int64_t: n,
-      //? END
-      wchar: s,
-      wstring: s,
-      MozExternalRefCountType: n,
-      //TODO: TYPE
-      "Array<T>": "any",
-      //nsrootidl.idl
-      PRTime: n,
-      nsresult: n,
-      size_t: n,
-
-      nsIDRef: i,
-      nsIIDRef: i,
-      nsCIDRef: i,
-      nsIDPtr: i,
-      nsIIDPtr: i,
-      nsCIDPtr: i,
-
-      nsQIResult: "object",
-
-      AUTF8String: s,
-      ACString: s,
-      AString: s,
-      jsval: "any",
-      Promise: "Promise<any>",
-    })
-  );
-  const ret = map.get(str);
-  return ret ? ret : str;
-}
-
-function processProperty(line: string): string {
-  const _tmp = line.replace("attribute ", "").split(" ");
-  const _name = _tmp.pop()?.replace(";", "").trim();
-  if (!_name) {
-    throw Error(`_name is undefined`);
-  }
-  const _type = _tmp.join(" ").trim();
-
-  return _name + ": " + IDLType2TS(_type) + ",";
-}
-
-let tmp_processFunction = "";
-let in_function = false;
-function processFunction(line: string): string {
-  console.warn(`pFline : ${line}`);
-  //* FOR MULTILINE FUNCTION
-  {
-    if (!line.includes(");")) {
-      tmp_processFunction += line;
-      in_function = true;
-      return "";
+    //* check retval of attribute
+    if (_attribute?.values.includes("retval")) {
+      ret_type_retval = type;
     } else {
-      line = tmp_processFunction + line;
-      tmp_processFunction = "";
-      in_function = false;
+      ret_args.push(`${type}: ${name},//${tokens[0]}\n`);
     }
   }
+  return [ret_args.join(","), ret_type_retval];
+}
 
-  let _tmp = line.split(" ");
-  let _ret_type = "";
-  //* CHECK OUT VALUE
-  while (true) {
-    if (!_tmp[0].includes("(")) {
-      _ret_type += _tmp[0] + " ";
-      _tmp = _tmp.slice(1);
-    } else {
-      _ret_type = IDLType2TS(_ret_type.trimEnd());
-      break;
-    }
-  }
-  console.error(`_tmp: ${_tmp}`);
-  const _func = (() => {
-    let __func = _tmp.join(" ").split("(");
-    if (__func.length > 2) {
-      console.log(`__func: ${__func}`);
-      const __ret = [__func[0], __func.slice(1, __func.length - 2).join("("), __func[__func.length - 1]];
-      console.log(`__func ${__ret}`);
-      return __ret;
-    } else {
-      return __func;
-    }
+function processFunction(line: string, attr: Attribute | null): string {
+  console.log("processFunction start");
+  console.log(line);
+  const [_first, _second] = line.split("(");
+  console.log(`${_first}, ${_second}`);
+
+  const [func_name, ret_type] = (() => {
+    const _arr_first = _first.split(" ");
+    return [_arr_first.pop(), _arr_first.join(" ")];
   })();
 
-  const funcName = _func[0];
-
-  function processFuncArgs(args: string): string {
-    if (args === "") return "";
-    console.log(`args: ${args}`);
-    let _attr: Attribute;
-
-    let arr_args = args.split(",");
-    let ret: string[] = [];
-
-    {
-      let _is_attr = false;
-      let _buf = "";
-      arr_args.forEach((i, idx) => {
-        if (_is_attr) {
-          _buf += i;
-        }
-        if (i.includes("[")) {
-          _is_attr = true;
-          _buf += i;
-        }
-      });
-      if (_is_attr) {
-        [_attr, _buf] = processAttribute(_buf);
-        if (_attr.values.includes("retval")) {
-          // ret_val is always on end
-          _ret_type = IDLType2TS(_buf);
-          arr_args = args.replace(/\[.*\].*/, "").split(",");
-          console.log(`arr_args: ${arr_args}`);
-        } else {
-          arr_args = _buf.split(",");
-        }
-      }
-    }
-
-    for (let i of arr_args) {
-      const arr = i.split(" ").filter((v) => v !== "");
-      console.log(arr);
-      // arr[0] is `in` or `out`
-      let arg_name = arr[arr.length - 1].trim();
-      if (arg_name === "function") {
-        arg_name = "func";
-      }
-      ret.push(
-        arg_name +
-          ": " +
-          IDLType2TS(
-            arr
-              .slice(1, arr.length - 1)
-              .join(" ")
-              .trim()
-          )
-      );
-    }
-    return ret.join(",");
-  }
+  const raw_args = _second.replace(");", "").trim();
+  console.log(raw_args);
 
   let args: string;
-  if (_func[1].startsWith(")")) {
-    args = "";
+  let args_retval: string | null;
+  if (raw_args) {
+    [args, args_retval] = processFuncArgs(raw_args);
   } else {
-    args = processFuncArgs(_func[1].replace(");", ""));
+    [args, args_retval] = ["", null];
   }
 
-  console.log(`func: ${funcName}(${args}) : ${_ret_type},`);
-  return `${funcName}(${args}) : ${_ret_type},`;
-
-  //IDLType2TS(_ret_type)
+  console.log("return FUNCTION");
+  console.log(`${attr ? `//FUNCTION ${attr.toLine()}\n` : ""}${func_name}: (${args}) : ${args_retval ? args_retval : ret_type}`);
+  //console.log(attr.values);
+  return `${attr ? `//FUNCTION ${attr.toLine()}\n` : ""}${func_name}: (${args}) => ${args_retval ? args_retval : ret_type};`;
 }
-
-function processAttribute(line: string): [Attribute, string] {
-  const arr = line
-    .slice(1, line.indexOf("]"))
-    .split(",")
-    .map((v) => {
-      return v.trim();
-    });
-
-  //console.log(_out);
-  const _out = line.slice(line.indexOf("]") + 1);
-  attribute = { values: arr, newline: _out.trim() === "" };
-  console.log(`ATTRIBUTE: ${attribute.values}`);
-  return [attribute, _out.trimStart()];
-}
-
-let in_cenum = false;
-let buf_cenum = "";
+//TODO
 function processCENUM(line: string): string {
-  if (!line.includes("}")) {
-    in_cenum = true;
-    buf_cenum += line.trim();
-    return "";
-  } else {
-    const _tmp = buf_cenum.replace("cenum ", "").split("{");
+  {
+    const _tmp = line.replace("cenum ", "").split("{");
     const [enum_name, byte_num] = _tmp[0].split(":");
     const inner = _tmp[1]
       .replace("};", "")
@@ -336,198 +177,92 @@ function processCENUM(line: string): string {
       inner_buf += `${_split[0].trim()} : ${num},`;
       num += 1;
     }
-    in_cenum = false;
-    buf_cenum = "";
     return `//byte_num: ${byte_num.trim()};\n${enum_name}: {${inner_buf}}`;
   }
 }
 
-let attribute: Attribute | null = null;
-let temp = "";
-// because of MULTI_COMMENT IN INTERFACE
-let origStatus: Status = Status.NORMAL;
-let status: Status = Status.NORMAL;
-
 function processLine(line: string): string {
-  let readonly = false;
-  //console.log(line);
-  //console.log(status);
-  //*NORMAL
-  if (status === Status.NORMAL || status === Status.INTERFACE) {
-    // temp is not used in NORMAL
-    temp = "";
-    //* COMMENT
-    if (line.includes("/*")) {
-      //single line
-      if (line.includes("*/")) {
-        //return "";
-        return line + "\n";
-      }
-      // multi line
-      else {
-        origStatus = status;
-        status = Status.MULTI_COMMENT;
-        temp += line;
-        return "";
-      }
-    } else {
-      if (line.includes("//")) return line + "\n";
-    }
+  let attribute: Attribute | null = null;
 
-    line = line.trimStart();
+  let _line = line;
 
-    //empty line
-    if (line === "") {
-      return "";
-    } else if (line.trim() === "") {
-      return "";
-      return "\n";
-    }
+  //* ATTRIBUTE
+  if (_line.startsWith("[")) {
+    [attribute, _line] = Attribute.fromLine(_line);
+  }
 
-    //* CHECK IN FUNCTION
-    if (in_function) {
-      line = processFunction(line.trimStart());
-    } else if (in_cenum) {
-      line = processCENUM(line.trimStart());
-    } else {
-      //* ATTRIBUTE
-      if (line.startsWith("[")) {
-        [attribute, line] = processAttribute(line);
-      }
+  //* REJECT NATIVE
+  //TODO: move to some function
+  if (_line.startsWith("native")) {
+    return `///NATIVE METHOD ${line}`;
+  }
 
-      //* REJECT NATIVE
-      if (line.startsWith("native")) {
-        attribute = null;
-        return "";
-      }
+  //* change #import to comment
+  if (_line.startsWith("#include")) {
+    return `///INCLUDE ${line}`;
+  }
 
-      //* REJECT OBJECT NOT FOR JS
-      if (attribute) {
-        for (const i of attribute.values) {
-          //console.log(i);
-          if (i === "noscript") {
-            attribute = null;
-            return "";
-          }
-        }
-      }
-
-      //* change #import to comment
-      if (line.startsWith("#include")) {
-        line = "//TODO: " + line;
-      }
-
-      if (line.startsWith("interface")) {
-        line = line.replace(":", "extends");
-        if (!line.includes(";")) {
-          status = Status.INTERFACE;
-        } else {
-          line = line.replace(";", " {}");
-        }
-      }
-
-      if (status === Status.INTERFACE) {
-        //* interface property(attribute keyword)
-        if (line.startsWith("readonly ")) {
-          readonly = true;
-          line = line.split("readonly ")[1];
-        }
-
-        //* PROPERTY
-        if (line.startsWith("attribute")) {
-          line = processProperty(line);
-        }
-        //* CONST
-        else if (line.startsWith("const")) {
-          const _tmp = line.split("=")[0].trim().replace("const ", "");
-          const _type = IDLType2TS(_tmp.slice(0, _tmp.lastIndexOf(" ")));
-          const _name = _tmp.slice(_tmp.lastIndexOf(" ") + 1);
-          line = `//const;${line.split("=")[1].trim().replace(";", "")}\n${_name}: ${_type},`;
-        }
-        //* CENUM
-        else if (line.startsWith("cenum")) {
-          line = processCENUM(line);
-        }
-        //* INTERFACE
-        //else if (line.includes("(")) {
-        else if (line.startsWith("interface") || line.startsWith("{") || line.endsWith("]")) {
-          //does nothing
-        }
-        //* FUNCTION
-        else {
-          line = processFunction(line);
-        }
-        //console.log(line);
-        //console.log(indent);
-
-        if (line.includes("}")) status = Status.NORMAL;
-      }
-    }
-
-    if (attribute) {
-      const attributeString = "[" + attribute.values.join(", ") + "]";
-      let _line = "//" + attributeString;
-      if (attribute.newline) {
-        _line += "\\n" + "\n";
-      } else {
-        _line +=
-          "\n" +
-          //+ " "
-          (readonly ? "readonly" : "") +
-          line +
-          "\n\n";
-      }
-      line = _line;
-    } else {
-      //console.log(indent);
-      line = (readonly ? "readonly " : "") + line + "\n";
-      if (!(line.includes("interface") && !line.includes("{}"))) {
-        line += "\n";
-      }
-    }
-    attribute = null;
-
-    line = line.replace("};", "}");
-    return line;
-  } else if (status === Status.MULTI_COMMENT) {
-    if (line.includes("*/")) {
-      temp += line + "\n";
-      status = origStatus;
-      //return "";
-      return temp;
-    } else {
-      temp += line + "\n";
-      return "";
+  if (_line.startsWith("interface")) {
+    _line = _line.replace(":", "extends");
+    if (_line.includes(";")) {
+      _line = _line.replace(";", " {}");
     }
   }
-  throw Error(`THIS CODE SHOULD NOT BE RUNNED`);
+
+  //* PROPERTY
+  if (_line.startsWith("attribute") || _line.startsWith("readonly")) {
+    _line = processProperty(_line, attribute);
+  }
+  //* CONST
+  else if (_line.startsWith("const")) {
+    const _tmp = _line.split("=")[0].trim().replace("const ", "");
+    const _type = IDLType2TS(_tmp.slice(0, _tmp.lastIndexOf(" ")));
+    const _name = _tmp.slice(_tmp.lastIndexOf(" ") + 1);
+    _line = `//CONST\n${_line.split("=")[1].trim().replace(";", "")}\n${_name}: ${_type},`;
+  }
+  // //* CENUM
+  // else if (line.startsWith("cenum")) {
+  //   line = processCENUM(line);
+  // }
+  //* INTERFACE
+  else if (_line.startsWith("interface") || _line.endsWith("]") || _line.endsWith("};")) {
+  } else if (_line.trim() === "") {
+  }
+  //* FUNCTION
+  else if (_line.includes("(")) {
+    _line = processFunction(_line, attribute);
+  }
+
+  return _line;
 }
 
 function process(src: string): string {
   let buf = "";
   let index = 0;
-  while (false) {
+  while (index < src.length) {
     //* MULTICOMMENT
     if (src.startsWith("/*", index)) {
-      const idx_end_multicomment = src.indexOf("*/", index);
+      const idx_end_multicomment = src.indexOf("*/", index) + 2;
       buf += src.slice(index, idx_end_multicomment);
-      src = src.slice(idx_end_multicomment);
       index = idx_end_multicomment;
-    } else if (src.startsWith("//", index)) {
-      const idx_next_newline = src.indexOf("\n", index);
+    }
+    //* SINGLECOMMENT
+    else if (src.startsWith("//", index)) {
+      const idx_next_newline = src.indexOf("\n", index) + 1;
       buf += src.slice(index, idx_next_newline);
-      src = src.slice(idx_next_newline);
+      index = idx_next_newline;
+    }
+    //* NORMAL
+    else {
+      const idx_next_newline = src.indexOf("\n", index) + 1;
+      buf += processLine(src.slice(index, idx_next_newline));
       index = idx_next_newline;
     }
   }
-  {
-    buf = src;
-  }
-
-  // for (const i of src.split("\n")) {
-  //   //console.log(i);
-  //   buf += processLine(i);
+  // {
+  //   buf = src;
   // }
+
   return buf;
 }
 
