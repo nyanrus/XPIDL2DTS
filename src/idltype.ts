@@ -20,11 +20,11 @@ export function IDLType2TS(str: string): string {
       "unsigned long long": n,
       "unsigned short": n,
       //? START
-      uint32_t: n,
-      uint64_t: n,
-      int32_t: n,
-      bool: "boolean",
-      int64_t: n,
+      // uint32_t: n,
+      // uint64_t: n,
+      // int32_t: n,
+      // bool: "boolean",
+      // int64_t: n,
       //? END
       wchar: s,
       wstring: s,
@@ -32,8 +32,8 @@ export function IDLType2TS(str: string): string {
       //TODO: TYPE
       "Array<T>": "any",
       //nsrootidl.idl
-      PRTime: n,
-      nsresult: n,
+      //PRTime: n,
+      //nsresult: n,
       size_t: n,
 
       nsIDRef: i,
