@@ -208,7 +208,7 @@ function processLine(line: string): string {
   }
 
   if (_line.startsWith("interface")) {
-    _line = _line.replace(":", "extends");
+    _line = _line.replace(":", " extends ");
     if (_line.includes(";")) {
       _line = _line.replace(";", " {}");
     }
@@ -223,7 +223,7 @@ function processLine(line: string): string {
     const _tmp = _line.split("=")[0].trim().replace("const ", "");
     const _type = IDLType2TS(_tmp.slice(0, _tmp.lastIndexOf(" ")));
     const _name = _tmp.slice(_tmp.lastIndexOf(" ") + 1);
-    _line = `//CONST ${_line.split("=")[1].trim().replace(";", "")}\n${_name}: ${_type},\n`;
+    _line = `//CONST ${_line.split("=")[1].trim().replace(";", "")}\n${_name}: ${_type};\n`;
   }
   //* TYPEDEF
   else if (_line.startsWith("typedef")) {

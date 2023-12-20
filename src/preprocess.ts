@@ -102,6 +102,10 @@ export function preprocess(src: string): string {
     }
   }
 
+  {
+    buf = buf.replaceAll(" (", "(");
+  }
+
   // //* include to comment
   // {
   //   src = src.replaceAll("#include", "//#include");
