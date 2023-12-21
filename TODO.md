@@ -27,30 +27,3 @@ dist/p/xpcom/io/nsIConverterInputStream.d.ts
 [error] 40 | aCharset: number,//in
 [error] 41 | aBufferSize: number,//in
 [error] 42 | aReplacementChar: char16_t,//in
-
-dist/p/xpcom/io/nsIDirectoryService.d.ts
-[error] dist/p/xpcom/io/nsIDirectoryService.d.ts: SyntaxError: '{' expected. (13:46)
-[error] 11 | _ Used by Directory Service to get file locations.
-[error] 12 | _/
-[error] > 13 | interface nsIDirectoryServiceProviderextends nsISupports {
-[error] | ^
-[error] 14 | /\*_
-[error] 15 | _ getFile
-[error] 16 | \*
-
-dist/p/xpcom/system/nsIGIOService.d.ts
-[error] dist/p/xpcom/system/nsIGIOService.d.ts: SyntaxError: ';' expected. (21:78)
-[error] 19 | //CONST 2
-[error] 20 | EXPECTS_URIS_FOR_NON_FILES: number,
-[error] > 21 | readonly id:string,readonly command:string,readonly supportedURISchemes:long expectsURIs; // see constants above readonly attribute nsIUTF8StringEnumerator,setAsDefaultForMimeType: (mimeType: string,//in
-[error] | ^
-[error] 22 | ) => void;
-[error] 23 | setAsDefaultForFileExtensions: (extensions: string,//in
-[error] 24 | ) => void;
-
-dist/p/xpcom/system/nsIXULRuntime.d.ts
-[error] dist/p/xpcom/system/nsIXULRuntime.d.ts: SyntaxError: '}' expected. (215:1)
-[error] 213 | \*/
-[error] 214 | readonly lastAppBuildID:string,};
-[error] > 215 |
-[error] | ^
