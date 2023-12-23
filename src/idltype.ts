@@ -1,3 +1,10 @@
+let unresolved_types: string[] = [];
+
+/**
+ * Convert IDLType string to TypeScript Type
+ * @param str IDLType
+ * @returns TypeScript Type
+ */
 export function IDLType2TS(str: string): string {
   const n = "number";
   const s = "string";
@@ -50,8 +57,21 @@ export function IDLType2TS(str: string): string {
       AString: s,
       jsval: "any",
       Promise: "Promise<any>",
-    })
+
+      void: "void",
+    }),
   );
   const ret = map.get(str);
+  if (!ret) {
+    unresolved_types.push(str);
+  }
   return ret ? ret : str;
+}
+
+export function getUnresolvedTypes(): string[] {
+  return [...new Set(unresolved_types)];
+}
+
+export function resetUnresolvedTypes() {
+  unresolved_types = [];
 }
