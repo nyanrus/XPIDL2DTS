@@ -5,6 +5,7 @@ import { isEmpty } from "./src/clean_empty_dts.js";
 import { processLine } from "./src/funcs.js";
 import { getExportFromDir } from "./src/export2list.js";
 import { getUnresolvedTypes, resetUnresolvedTypes } from "./src/idltype.js";
+import { parseIncludeFromDir } from "./src/include2import.js";
 
 function process(src: string): string {
   resetUnresolvedTypes();
@@ -54,51 +55,74 @@ function process(src: string): string {
   return buf;
 }
 
-async function processAll4Test(root: string) {
+async function processAll4Test(root: string[]) {
   console.log("processing");
-  const files = await fg.default([root + "/" + "**/*.idl"], { dot: true });
+  // throw Error(
+  //   JSON.stringify(
+  //     root.map((v) => {
+  //       return v + "/" + "**/*.idl";
+  //     }),
+  //   ),
+  // );
+  const files = await fg.default(
+    root.map((v) => {
+      return v + "/" + "**/*.idl";
+    }),
+    { dot: true },
+  );
 
   for (const _file of files) {
     console.log(_file);
     if (!_file.includes("node_modules") && !_file.includes("other-licenses")) {
       //console.log(_file);
       //console.log(_file.name);
-      if (_file.endsWith(".idl")) {
-        const path =
-          _file.replace("\\", "/").split("/").slice(0, -1).join("/") + "/";
-        console.log(_file);
-        const src = (await fs.readFile(_file)).toString();
-        const preprocessed = preprocess(src);
-        await fs.mkdir("dist/pp/" + path.replace("../", ""), {
+
+      const path =
+        _file.replace("\\", "/").split("/").slice(0, -1).join("/") + "/";
+      console.log(_file);
+      const src = (await fs.readFile(_file)).toString();
+      const preprocessed = preprocess(src);
+      await fs.mkdir("dist/pp/" + path.replace("../", ""), {
+        recursive: true,
+      });
+
+      await fs.writeFile(
+        "dist/pp/" + _file.replace("../", "").replace(".idl", ".d.ts"),
+        preprocessed,
+      );
+      const processed = process(preprocessed);
+
+      if (_file.includes("nsIArray.idl")) {
+        fs.writeFile(
+          "nsIArray.d.ts",
+
+          processed,
+        );
+      }
+
+      //console.log(path);
+      if (!isEmpty(processed)) {
+        await fs.mkdir("dist/p/" + path.replace("../", ""), {
           recursive: true,
         });
-
-        await fs.writeFile(
-          "dist/pp/" + _file.replace("../", "").replace(".idl", ".d.ts"),
-          preprocessed,
+        fs.writeFile(
+          "dist/p/" + _file.replace("../", "").replace(".idl", ".d.ts"),
+          processed,
         );
-        const processed = process(preprocessed);
-
-        //console.log(path);
-        if (!isEmpty(processed)) {
-          await fs.mkdir("dist/p/" + path.replace("../", ""), {
-            recursive: true,
-          });
-          fs.writeFile(
-            "dist/p/" + _file.replace("../", "").replace(".idl", ".d.ts"),
-            processed,
-          );
-        }
       }
     }
   }
   const exports = await getExportFromDir("dist");
-  fs.writeFile("./exports.json", JSON.stringify(exports));
+  await fs.writeFile("./exports.json", JSON.stringify(exports));
+  parseIncludeFromDir("dist", exports);
 }
 
 function main() {
   {
-    processAll4Test("../nyanrus_Floorp/xpcom");
+    processAll4Test([
+      "../nyanrus_Floorp/xpcom",
+      "../nyanrus_Floorp/netwerk/mime",
+    ]);
   }
   {
     // const testData = `/**

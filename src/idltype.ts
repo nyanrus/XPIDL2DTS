@@ -68,10 +68,27 @@ export function IDLType2TS(str: string): string {
   return ret ? ret : str;
 }
 
+let resolvedTypes: string[] = [];
+
 export function getUnresolvedTypes(): string[] {
-  return [...new Set(unresolved_types)];
+  return [
+    ...new Set(
+      unresolved_types.filter((v) => {
+        return !resolvedTypes.includes(v);
+      }),
+    ),
+  ];
 }
 
 export function resetUnresolvedTypes() {
   unresolved_types = [];
+  resolvedTypes = [];
+}
+
+/**
+ * remove elems like webidl that exposed to dom(js) already
+ * @param arr
+ */
+export function addResolveTypes(arr: string[]) {
+  resolvedTypes.push(...arr);
 }

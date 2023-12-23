@@ -1,5 +1,5 @@
 import { Attribute } from "./defines.js";
-import { IDLType2TS } from "./idltype.js";
+import { IDLType2TS, addResolveTypes } from "./idltype.js";
 
 /**
  * in interface parse
@@ -221,7 +221,7 @@ export function processLine(
   let _line = line;
 
   if (not_scriptable_interface) {
-    if (_line.startsWith("};")) {
+    if (_line.trim().startsWith("};")) {
       not_scriptable_interface = false;
     }
     return "";
@@ -249,7 +249,7 @@ export function processLine(
     let interfaceName: string;
     let _tmp = _line.split(":");
     interfaceName = _tmp[0].replace("interface", "").replace("{", "").trim();
-    if (!attribute?.values.includes("scriptable")) {
+    if (!attribute?.values.includes("scriptable") && !_line.includes(";")) {
       not_scriptable_interface = true;
       return "";
     }
@@ -286,6 +286,12 @@ export function processLine(
     const name = tokens.slice(-1)[0].replace(";\n", "");
     _line = `export type ${name} = ${type};\n`;
     obj_export_ident.type.push(name);
+  } else if (_line.startsWith("webidl ")) {
+    const tokens = _line.split(" ");
+    //0 is webidl keyword
+    const name = _line[1].replace(";", "");
+    addResolveTypes([name]);
+    _line = `///WEBIDL ${name}`;
   }
   //* CENUM
   else if (line.startsWith("cenum ")) {

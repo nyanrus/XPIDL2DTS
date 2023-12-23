@@ -2,17 +2,17 @@ import fg from "fast-glob";
 import * as fs from "fs/promises";
 
 export function getExportJSON(src: string): any {
-  console.log(
-    "export:" +
-      src
-        .split("\n")
-        .filter((v) => {
-          return v.includes("///EXPORT");
-        })
-        .join("")
-        .replace("///EXPORT", "")
-        .trim(),
-  );
+  // console.log(
+  //   "export:" +
+  //     src
+  //       .split("\n")
+  //       .filter((v) => {
+  //         return v.includes("///EXPORT");
+  //       })
+  //       .join("")
+  //       .replace("///EXPORT", "")
+  //       .trim(),
+  // );
   if (
     src
       .split("\n")
@@ -45,6 +45,7 @@ export async function getExportFromDir(dir: string): Promise<any> {
     const json = getExportJSON(src);
     if (json) {
       json.filePath = file;
+      //@ts-ignore
       Object.assign(obj, { [fileName]: json });
     }
   }
