@@ -289,9 +289,9 @@ export function processLine(
   } else if (_line.startsWith("webidl ")) {
     const tokens = _line.split(" ");
     //0 is webidl keyword
-    const name = _line[1].replace(";", "");
+    const name = tokens[1].replace(";", "").trim();
     addResolveTypes([name]);
-    _line = `///WEBIDL ${name}`;
+    _line = `///WEBIDL ${name}\n`;
   }
   //* CENUM
   else if (line.startsWith("cenum ")) {

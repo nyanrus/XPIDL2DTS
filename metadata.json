@@ -1,0 +1,780 @@
+{
+  "nsIMIMEHeaderParam.d.ts": {
+    "type": [],
+    "interface": ["nsIMIMEHeaderParam"],
+    "filePath": "dist/p/nyanrus_Floorp/netwerk/mime/nsIMIMEHeaderParam.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIMIMEInfo.d.ts": {
+    "type": ["nsHandlerInfoAction"],
+    "interface": [
+      "nsIHandlerInfo",
+      "nsIMIMEInfo",
+      "nsIHandlerApp",
+      "nsILocalHandlerApp",
+      "nsIWebHandlerApp",
+      "nsIDBusHandlerApp"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/netwerk/mime/nsIMIMEInfo.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIMIMEService.d.ts": {
+    "type": [],
+    "interface": ["nsIMIMEService"],
+    "filePath": "dist/p/nyanrus_Floorp/netwerk/mime/nsIMIMEService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIAvailableMemoryWatcherBase.d.ts": {
+    "type": [],
+    "interface": ["nsITabUnloader", "nsIAvailableMemoryWatcherBase"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIAvailableMemoryWatcherBase.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIConsoleListener.d.ts": {
+    "type": [],
+    "interface": ["nsIConsoleListener"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIConsoleListener.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIConsoleMessage.d.ts": {
+    "type": [],
+    "interface": ["nsIConsoleMessage"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIConsoleMessage.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIConsoleService.d.ts": {
+    "type": [],
+    "interface": ["nsIConsoleService"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIConsoleService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsICycleCollectorListener.d.ts": {
+    "type": [],
+    "interface": [
+      "nsICycleCollectorHandler",
+      "nsICycleCollectorLogSink",
+      "nsICycleCollectorListener"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsICycleCollectorListener.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIDebug2.d.ts": {
+    "type": [],
+    "interface": ["nsIDebug2"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIDebug2.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIException.d.ts": {
+    "type": [],
+    "interface": ["nsIStackFrame", "nsIException"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIException.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIInterfaceRequestor.d.ts": {
+    "type": [],
+    "interface": ["nsIInterfaceRequestor"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIInterfaceRequestor.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIMacPreferencesReader.d.ts": {
+    "type": [],
+    "interface": ["nsIMacPreferencesReader"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIMacPreferencesReader.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsISupportsPrimitives.d.ts"
+    ]
+  },
+  "nsIMemoryInfoDumper.d.ts": {
+    "type": [],
+    "interface": [
+      "nsIFinishDumpingCallback",
+      "nsIDumpGCAndCCLogsCallback",
+      "nsIMemoryInfoDumper"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIMemoryInfoDumper.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIMemoryReporter.d.ts": {
+    "type": [],
+    "interface": [
+      "nsIHandleReportCallback",
+      "nsIMemoryReporter",
+      "nsIFinishReportingCallback",
+      "nsIHeapAllocatedCallback",
+      "nsIMemoryReporterManager"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIMemoryReporter.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIMessageLoop.d.ts": {
+    "type": [],
+    "interface": ["nsIMessageLoop"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIMessageLoop.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISupports.d.ts": {
+    "type": [],
+    "interface": ["nsISupports"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsISupports.d.ts",
+    "imports": ["nsrootidl.d.ts"]
+  },
+  "nsIUUIDGenerator.d.ts": {
+    "type": [],
+    "interface": ["nsIUUIDGenerator"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIUUIDGenerator.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIVersionComparator.d.ts": {
+    "type": [],
+    "interface": ["nsIVersionComparator"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIVersionComparator.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIWeakReference.d.ts": {
+    "type": [],
+    "interface": ["nsIWeakReference", "nsISupportsWeakReference"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsIWeakReference.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsrootidl.d.ts": {
+    "type": [
+      "bool",
+      "uint8_t",
+      "uint16_t",
+      "char16_t",
+      "uint32_t",
+      "uint64_t",
+      "PRTime",
+      "int16_t",
+      "int32_t",
+      "int64_t",
+      "nsresult"
+    ],
+    "interface": [],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/base/nsrootidl.d.ts",
+    "imports": []
+  },
+  "nsICategoryManager.d.ts": {
+    "type": [],
+    "interface": ["nsICategoryEntry", "nsICategoryManager"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/components/nsICategoryManager.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsISupportsPrimitives.d.ts"
+    ]
+  },
+  "nsIClassInfo.d.ts": {
+    "type": [],
+    "interface": ["nsIClassInfo"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/components/nsIClassInfo.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIComponentManager.d.ts": {
+    "type": [],
+    "interface": ["nsIComponentManager"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/components/nsIComponentManager.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIComponentRegistrar.d.ts": {
+    "type": [],
+    "interface": ["nsIComponentRegistrar"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/components/nsIComponentRegistrar.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIFactory.d.ts": {
+    "type": [],
+    "interface": ["nsIFactory"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/components/nsIFactory.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIServiceManager.d.ts": {
+    "type": [],
+    "interface": ["nsIServiceManager"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/components/nsIServiceManager.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIArray.d.ts": {
+    "type": [],
+    "interface": ["nsIArray"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIArray.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIArrayExtensions.d.ts": {
+    "type": [],
+    "interface": ["nsIArrayExtensions"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIArrayExtensions.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIArray.d.ts"]
+  },
+  "nsIINIParser.d.ts": {
+    "type": [],
+    "interface": ["nsIINIParser", "nsIINIParserWriter", "nsIINIParserFactory"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIINIParser.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIMutableArray.d.ts": {
+    "type": [],
+    "interface": ["nsIMutableArray"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIMutableArray.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIArray.d.ts",
+      "nsIArrayExtensions.d.ts"
+    ]
+  },
+  "nsIObserver.d.ts": {
+    "type": [],
+    "interface": ["nsIObserver"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIObserver.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIObserverService.d.ts": {
+    "type": [],
+    "interface": ["nsIObserverService"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIObserverService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIPersistentProperties2.d.ts": {
+    "type": [],
+    "interface": ["nsIPropertyElement", "nsIPersistentProperties"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIPersistentProperties2.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIProperties.d.ts"]
+  },
+  "nsIProperties.d.ts": {
+    "type": [],
+    "interface": ["nsIProperties"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIProperties.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIProperty.d.ts": {
+    "type": [],
+    "interface": ["nsIProperty"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIProperty.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIPropertyBag.d.ts": {
+    "type": [],
+    "interface": ["nsIPropertyBag"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIPropertyBag.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIPropertyBag2.d.ts": {
+    "type": [],
+    "interface": ["nsIPropertyBag2"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIPropertyBag2.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIPropertyBag.d.ts"]
+  },
+  "nsISerializable.d.ts": {
+    "type": [],
+    "interface": ["nsISerializable"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsISerializable.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISimpleEnumerator.d.ts": {
+    "type": [],
+    "interface": [
+      "nsIJSEnumerator",
+      "nsISimpleEnumeratorBase",
+      "nsISimpleEnumerator"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsISimpleEnumerator.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIStringEnumerator.d.ts": {
+    "type": [],
+    "interface": [
+      "nsIStringEnumeratorBase",
+      "nsIStringEnumerator",
+      "nsIUTF8StringEnumerator"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIStringEnumerator.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISupportsIterators.d.ts": {
+    "type": [],
+    "interface": [
+      "nsIOutputIterator",
+      "nsIInputIterator",
+      "nsIForwardIterator",
+      "nsIBidirectionalIterator",
+      "nsIRandomAccessIterator"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsISupportsIterators.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISupportsPrimitives.d.ts": {
+    "type": [],
+    "interface": [
+      "nsISupportsPrimitive",
+      "nsISupportsID",
+      "nsISupportsCString",
+      "nsISupportsString",
+      "nsISupportsPRBool",
+      "nsISupportsPRUint8",
+      "nsISupportsPRUint16",
+      "nsISupportsPRUint32",
+      "nsISupportsPRUint64",
+      "nsISupportsPRTime",
+      "nsISupportsChar",
+      "nsISupportsPRInt16",
+      "nsISupportsPRInt32",
+      "nsISupportsPRInt64",
+      "nsISupportsFloat",
+      "nsISupportsDouble",
+      "nsISupportsInterfacePointer"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsISupportsPrimitives.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIVariant.d.ts": {
+    "type": [],
+    "interface": ["nsIVariant", "nsIWritableVariant"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIVariant.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIWindowsRegKey.d.ts": {
+    "type": [],
+    "interface": ["nsIWindowsRegKey"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIWindowsRegKey.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIWritablePropertyBag.d.ts": {
+    "type": [],
+    "interface": ["nsIWritablePropertyBag"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIWritablePropertyBag.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIPropertyBag.d.ts"]
+  },
+  "nsIWritablePropertyBag2.d.ts": {
+    "type": [],
+    "interface": ["nsIWritablePropertyBag2"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/ds/nsIWritablePropertyBag2.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIPropertyBag.d.ts",
+      "nsIPropertyBag2.d.ts"
+    ]
+  },
+  "nsIAsyncInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIAsyncInputStream", "nsIInputStreamCallback"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIAsyncInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIInputStream.d.ts"]
+  },
+  "nsIAsyncOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIAsyncOutputStream", "nsIOutputStreamCallback"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIAsyncOutputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIOutputStream.d.ts"]
+  },
+  "nsIBinaryInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIBinaryInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIBinaryInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIInputStream.d.ts"]
+  },
+  "nsIBinaryOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIBinaryOutputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIBinaryOutputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIOutputStream.d.ts"]
+  },
+  "nsICloneableInputStream.d.ts": {
+    "type": [],
+    "interface": [
+      "nsICloneableInputStream",
+      "nsICloneableInputStreamWithRange"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsICloneableInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIInputStream.d.ts"]
+  },
+  "nsIConverterInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIConverterInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIConverterInputStream.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIUnicharInputStream.d.ts"
+    ]
+  },
+  "nsIConverterOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIConverterOutputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIConverterOutputStream.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIUnicharOutputStream.d.ts"
+    ]
+  },
+  "nsIDirectoryEnumerator.d.ts": {
+    "type": [],
+    "interface": ["nsIDirectoryEnumerator"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIDirectoryEnumerator.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsISimpleEnumerator.d.ts"
+    ]
+  },
+  "nsIDirectoryService.d.ts": {
+    "type": [],
+    "interface": [
+      "nsIDirectoryServiceProvider",
+      "nsIDirectoryServiceProvider2",
+      "nsIDirectoryService"
+    ],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIDirectoryService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIFile.d.ts": {
+    "type": [],
+    "interface": ["nsIFile"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIFile.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsISimpleEnumerator.d.ts",
+      "nsIDirectoryEnumerator.d.ts"
+    ]
+  },
+  "nsIInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIInputStreamPriority.d.ts": {
+    "type": [],
+    "interface": ["nsIInputStreamPriority"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIInputStreamPriority.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIRunnable.d.ts"]
+  },
+  "nsIInputStreamTee.d.ts": {
+    "type": [],
+    "interface": ["nsIInputStreamTee"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIInputStreamTee.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIInputStream.d.ts"]
+  },
+  "nsIIOUtil.d.ts": {
+    "type": [],
+    "interface": ["nsIIOUtil"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIIOUtil.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsILineInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsILineInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsILineInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsILocalFileMac.d.ts": {
+    "type": [],
+    "interface": ["nsILocalFileMac"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsILocalFileMac.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsISimpleEnumerator.d.ts",
+      "nsIDirectoryEnumerator.d.ts",
+      "nsIFile.d.ts"
+    ]
+  },
+  "nsILocalFileWin.d.ts": {
+    "type": [],
+    "interface": ["nsILocalFileWin"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsILocalFileWin.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsISimpleEnumerator.d.ts",
+      "nsIDirectoryEnumerator.d.ts",
+      "nsIFile.d.ts"
+    ]
+  },
+  "nsIMultiplexInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIMultiplexInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIMultiplexInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIInputStream.d.ts"]
+  },
+  "nsIObjectInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIObjectInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIObjectInputStream.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIInputStream.d.ts",
+      "nsIBinaryInputStream.d.ts"
+    ]
+  },
+  "nsIObjectOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIObjectOutputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIObjectOutputStream.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIOutputStream.d.ts",
+      "nsIBinaryOutputStream.d.ts"
+    ]
+  },
+  "nsIOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIOutputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIOutputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIPipe.d.ts": {
+    "type": [],
+    "interface": ["nsIPipe", "nsISearchableInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIPipe.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIRandomAccessStream.d.ts": {
+    "type": [],
+    "interface": ["nsIRandomAccessStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIRandomAccessStream.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsITellableStream.d.ts",
+      "nsISeekableStream.d.ts"
+    ]
+  },
+  "nsISafeOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsISafeOutputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsISafeOutputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIScriptableBase64Encoder.d.ts": {
+    "type": [],
+    "interface": ["nsIScriptableBase64Encoder"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIScriptableBase64Encoder.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIScriptableInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIScriptableInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIScriptableInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISeekableStream.d.ts": {
+    "type": [],
+    "interface": ["nsISeekableStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsISeekableStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsITellableStream.d.ts"]
+  },
+  "nsIStorageStream.d.ts": {
+    "type": [],
+    "interface": ["nsIStorageStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIStorageStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIStreamBufferAccess.d.ts": {
+    "type": [],
+    "interface": ["nsIStreamBufferAccess"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIStreamBufferAccess.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIStringStream.d.ts": {
+    "type": [],
+    "interface": ["nsIStringInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIStringStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIInputStream.d.ts"]
+  },
+  "nsITellableStream.d.ts": {
+    "type": [],
+    "interface": ["nsITellableStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsITellableStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIUnicharInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIUnicharInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIUnicharInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIUnicharLineInputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIUnicharLineInputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIUnicharLineInputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIUnicharOutputStream.d.ts": {
+    "type": [],
+    "interface": ["nsIUnicharOutputStream"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/io/nsIUnicharOutputStream.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIBlocklistService.d.ts": {
+    "type": [],
+    "interface": ["nsIBlocklistService"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIBlocklistService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsICrashReporter.d.ts": {
+    "type": [],
+    "interface": ["nsICrashReporter"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsICrashReporter.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIDeviceSensors.d.ts": {
+    "type": [],
+    "interface": ["nsIDeviceSensorData", "nsIDeviceSensors"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIDeviceSensors.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIGeolocationProvider.d.ts": {
+    "type": [],
+    "interface": ["nsIGeolocationUpdate", "nsIGeolocationProvider"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIGeolocationProvider.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIGIOService.d.ts": {
+    "type": [],
+    "interface": ["nsIGIOMimeApp", "nsIGIOService"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIGIOService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIMIMEInfo.d.ts"]
+  },
+  "nsIGSettingsService.d.ts": {
+    "type": [],
+    "interface": ["nsIGSettingsCollection", "nsIGSettingsService"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIGSettingsService.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIHapticFeedback.d.ts": {
+    "type": [],
+    "interface": ["nsIHapticFeedback"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIHapticFeedback.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIPlatformInfo.d.ts": {
+    "type": [],
+    "interface": ["nsIPlatformInfo"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIPlatformInfo.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISystemInfo.d.ts": {
+    "type": [],
+    "interface": ["nsISystemInfo"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsISystemInfo.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIXULAppInfo.d.ts": {
+    "type": [],
+    "interface": ["nsIXULAppInfo"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIXULAppInfo.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIPlatformInfo.d.ts"]
+  },
+  "nsIXULRuntime.d.ts": {
+    "type": [],
+    "interface": ["nsIXULRuntime"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/system/nsIXULRuntime.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "NotXPCOMTest.d.ts": {
+    "type": [],
+    "interface": ["nsIScriptableOK", "nsIScriptableWithNotXPCOM"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/tests/NotXPCOMTest.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIEnvironment.d.ts": {
+    "type": [],
+    "interface": ["nsIEnvironment"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIEnvironment.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIEventTarget.d.ts": {
+    "type": [],
+    "interface": ["nsIEventTarget"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIEventTarget.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsIRunnable.d.ts"]
+  },
+  "nsINamed.d.ts": {
+    "type": [],
+    "interface": ["nsINamed"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsINamed.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIProcess.d.ts": {
+    "type": [],
+    "interface": ["nsIProcess"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIProcess.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIRunnable.d.ts": {
+    "type": [],
+    "interface": ["nsIRunnable", "nsIRunnablePriority"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIRunnable.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsISerialEventTarget.d.ts": {
+    "type": [],
+    "interface": ["nsISerialEventTarget"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsISerialEventTarget.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIRunnable.d.ts",
+      "nsIEventTarget.d.ts"
+    ]
+  },
+  "nsISupportsPriority.d.ts": {
+    "type": [],
+    "interface": ["nsISupportsPriority"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsISupportsPriority.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIThread.d.ts": {
+    "type": [],
+    "interface": ["nsIThread"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIThread.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIRunnable.d.ts",
+      "nsIEventTarget.d.ts",
+      "nsISerialEventTarget.d.ts",
+      "nsIThreadShutdown.d.ts"
+    ]
+  },
+  "nsIThreadInternal.d.ts": {
+    "type": [],
+    "interface": ["nsIThreadInternal"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIThreadInternal.d.ts",
+    "imports": [
+      "nsrootidl.d.ts",
+      "nsISupports.d.ts",
+      "nsIRunnable.d.ts",
+      "nsIEventTarget.d.ts",
+      "nsISerialEventTarget.d.ts",
+      "nsIThreadShutdown.d.ts",
+      "nsIThread.d.ts"
+    ]
+  },
+  "nsIThreadManager.d.ts": {
+    "type": [],
+    "interface": ["nsINestedEventLoopCondition", "nsIThreadManager"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIThreadManager.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsIThreadShutdown.d.ts": {
+    "type": [],
+    "interface": ["nsIThreadShutdown"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsIThreadShutdown.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts"]
+  },
+  "nsITimer.d.ts": {
+    "type": [],
+    "interface": ["nsITimerCallback", "nsITimer", "nsITimerManager"],
+    "filePath": "dist/p/nyanrus_Floorp/xpcom/threads/nsITimer.d.ts",
+    "imports": ["nsrootidl.d.ts", "nsISupports.d.ts", "nsINamed.d.ts"]
+  }
+}

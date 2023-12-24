@@ -1,7 +1,8 @@
 import fg from "fast-glob";
 import * as fs from "fs/promises";
+import { Metadata, ObjMetadata } from "./defines.js";
 
-export function getExportJSON(src: string): any {
+export function getExportJSON(src: string): Metadata | undefined {
   // console.log(
   //   "export:" +
   //     src
@@ -36,16 +37,17 @@ export function getExportJSON(src: string): any {
   }
 }
 
-export async function getExportFromDir(dir: string): Promise<any> {
-  const obj = {};
-  const files = await fg([dir + "/" + "**/*.d.ts"], { dot: true });
+export async function getExportFromDir(dir: string): Promise<ObjMetadata> {
+  const obj: ObjMetadata = {};
+  const files = await fg([dir + "/**/*.d.ts"], { dot: true });
   for (const file of files) {
     const fileName = file.replace("\\", "/").split("/").pop();
     const src = (await fs.readFile(file)).toString();
     const json = getExportJSON(src);
-    if (json) {
+    if (json && fileName) {
       json.filePath = file;
-      //@ts-ignore
+      json.imports = [];
+
       Object.assign(obj, { [fileName]: json });
     }
   }

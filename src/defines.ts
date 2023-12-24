@@ -1,5 +1,5 @@
 /**
- * XPIDL Attribute that like [A,B,...,C]
+ * XPIDL Attribute that like [A,B,...,Z]
  */
 export class Attribute {
   values: string[];
@@ -33,3 +33,12 @@ export class Attribute {
     return `[${this.values.join(", ")}]`;
   }
 }
+
+export interface Metadata {
+  type: string[];
+  interface: string[];
+  filePath: string;
+  imports: string[];
+}
+
+export type ObjMetadata = { [x: string]: Metadata };

@@ -5,7 +5,7 @@ import { isEmpty } from "./src/clean_empty_dts.js";
 import { processLine } from "./src/funcs.js";
 import { getExportFromDir } from "./src/export2list.js";
 import { getUnresolvedTypes, resetUnresolvedTypes } from "./src/idltype.js";
-import { parseIncludeFromDir } from "./src/include2import.js";
+import { parseIncludeFromDir } from "./src/include2list.js";
 
 function process(src: string): string {
   resetUnresolvedTypes();
@@ -112,9 +112,10 @@ async function processAll4Test(root: string[]) {
       }
     }
   }
-  const exports = await getExportFromDir("dist");
-  await fs.writeFile("./exports.json", JSON.stringify(exports));
-  parseIncludeFromDir("dist", exports);
+  let objMetadata = await getExportFromDir("dist/p");
+
+  objMetadata = await parseIncludeFromDir("dist/p", objMetadata);
+  await fs.writeFile("./metadata.json", JSON.stringify(objMetadata));
 }
 
 function main() {
