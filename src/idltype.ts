@@ -62,6 +62,10 @@ let resolvedTypes: string[] = [];
 export function IDLType2TS(str: string): string {
   //https://firefox-source-docs.mozilla.org/xpcom/xpidl.html
 
+  if (str.startsWith("Array<")) {
+    return IDLType2TS(str.split("<")[1].replace(">", "")) + "[]";
+  }
+
   const ret = map.get(str);
   if (!ret) {
     unresolvedTypes.push(str);

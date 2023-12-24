@@ -34,11 +34,16 @@ export class Attribute {
   }
 }
 
+export type Constants = {
+  [interfaceName: string]: { [constantName: string]: string };
+};
+
 export interface Metadata {
   type: string[];
   interface: string[];
   filePath: string;
   imports: string[];
+  constants: Constants;
 }
 
 export type ObjMetadata = { [x: string]: Metadata };

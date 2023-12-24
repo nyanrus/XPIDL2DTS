@@ -1,3 +1,4 @@
+import { registerConstant } from "./post-processing/constants2list.js";
 import { Attribute } from "./defines.js";
 import { IDLType2TS, addResolveTypes } from "./idltype.js";
 
@@ -141,7 +142,7 @@ export function processFuncArgs(raw_args: string): [string, string | null] {
       ret_type_retval = type;
     } else {
       //console.log(`name: ${name}`);
-      ret_args.push(`${name}: ${type},///${tokens[0]}\n`);
+      ret_args.push(`${name}: ${type},///${mode}\n`);
     }
   }
   return [ret_args.join(""), ret_type_retval];
@@ -212,6 +213,7 @@ function processCENUM(line: string): string {
 }
 
 let not_scriptable_interface = false;
+let interfaceName = "";
 export function processLine(
   line: string,
   obj_export_ident: { type: string[]; interface: string[] },
@@ -246,9 +248,11 @@ export function processLine(
 
   // [attr] interface [NAME] : [EXTEND_FROM] {}
   if (_line.startsWith("interface ")) {
-    let interfaceName: string;
     let _tmp = _line.split(":");
-    interfaceName = _tmp[0].replace("interface", "").replace("{", "").trim();
+    const _interfaceName = _tmp[0]
+      .replace("interface", "")
+      .replace("{", "")
+      .trim();
     if (!attribute?.values.includes("scriptable") && !_line.includes(";")) {
       not_scriptable_interface = true;
       return "";
@@ -259,8 +263,9 @@ export function processLine(
     _line = "export " + _tmp.join(" extends ").replaceAll(/[ ]+/g, " ");
     if (_line.includes(";")) {
       _line = "///ONELINE_INTERFACE " + _line.replace(";", " {}");
-    } else if (obj_export_ident) {
-      obj_export_ident.interface.push(interfaceName);
+    } else {
+      obj_export_ident.interface.push(_interfaceName);
+      interfaceName = _interfaceName;
     }
   }
 
@@ -273,10 +278,9 @@ export function processLine(
     const _tmp = _line.split("=")[0].trim().replace("const ", "");
     const _type = IDLType2TS(_tmp.slice(0, _tmp.lastIndexOf(" ")));
     const _name = _tmp.slice(_tmp.lastIndexOf(" ") + 1);
-    _line = `///CONST ${_line
-      .split("=")[1]
-      .trim()
-      .replace(";", "")}\n${_name}: ${_type};\n`;
+    const _value = _line.split("=")[1].trim().replace(";", "");
+    _line = `///CONST ${_value}\nreadonly ${_name}: ${_type};\n`;
+    registerConstant(interfaceName, _name, _value);
   }
   //* TYPEDEF
   else if (_line.startsWith("typedef ")) {

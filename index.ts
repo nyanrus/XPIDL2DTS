@@ -1,14 +1,22 @@
 import * as fs from "fs/promises";
 import * as fg from "fast-glob";
 import { preprocess } from "./src/preprocess.js";
-import { isEmpty } from "./src/clean_empty_dts.js";
+import { isEmpty } from "./src/post-processing/clean_empty_dts.js";
 import { processLine } from "./src/funcs.js";
-import { getExportFromDir } from "./src/export2list.js";
+import { getExportFromDir } from "./src/post-processing/export2metadata.js";
 import { getUnresolvedTypes, resetUnresolvedTypes } from "./src/idltype.js";
-import { parseIncludeFromDir } from "./src/include2list.js";
+import { parseIncludeFromDir } from "./src/post-processing/include2metadata.js";
+import { processImport2TSFromObjMetadata } from "./src/post-processing/metadata2import_dts.js";
+import { writeComponents } from "./src/post-processing/gen_components.js";
+import {
+  getConstants,
+  resetConstants,
+} from "./src/post-processing/constants2list.js";
+import { addConstantsWithMetadata } from "./src/post-processing/constants2metadata.js";
 
 function process(src: string): string {
   resetUnresolvedTypes();
+  resetConstants();
   let buf = "";
   let index = 0;
   let obj_export_ident = { type: [], interface: [] };
@@ -51,12 +59,15 @@ function process(src: string): string {
 
   buf += `\n///EXPORT ${JSON.stringify(obj_export_ident)}`;
   buf += `\n///UNRESOLVED_TYPES ${JSON.stringify(getUnresolvedTypes())}`;
+  buf += `\n///CONSTANTS ${JSON.stringify(getConstants())}`;
 
   return buf;
 }
 
-async function processAll4Test(root: string[]) {
+async function processAll4Test(root: string, dirs: string[]) {
   console.log("processing");
+
+  await fs.rmdir("./dist", { recursive: true });
   // throw Error(
   //   JSON.stringify(
   //     root.map((v) => {
@@ -65,8 +76,8 @@ async function processAll4Test(root: string[]) {
   //   ),
   // );
   const files = await fg.default(
-    root.map((v) => {
-      return v + "/" + "**/*.idl";
+    dirs.map((v) => {
+      return root + "/" + v + "/" + "**/*.idl";
     }),
     { dot: true },
   );
@@ -77,8 +88,10 @@ async function processAll4Test(root: string[]) {
       //console.log(_file);
       //console.log(_file.name);
 
-      const path =
+      const fileName = _file.replace("\\", "/").split("/").slice(-1)[0];
+      const realPath =
         _file.replace("\\", "/").split("/").slice(0, -1).join("/") + "/";
+      const path = realPath.replace(root + "/", "");
       console.log(_file);
       const src = (await fs.readFile(_file)).toString();
       const preprocessed = preprocess(src);
@@ -87,13 +100,13 @@ async function processAll4Test(root: string[]) {
       });
 
       await fs.writeFile(
-        "dist/pp/" + _file.replace("../", "").replace(".idl", ".d.ts"),
+        "dist/pp/" + path + "/" + fileName.replace(".idl", ".d.ts"),
         preprocessed,
       );
       const processed = process(preprocessed);
 
       if (_file.includes("nsIArray.idl")) {
-        fs.writeFile(
+        await fs.writeFile(
           "nsIArray.d.ts",
 
           processed,
@@ -105,8 +118,8 @@ async function processAll4Test(root: string[]) {
         await fs.mkdir("dist/p/" + path.replace("../", ""), {
           recursive: true,
         });
-        fs.writeFile(
-          "dist/p/" + _file.replace("../", "").replace(".idl", ".d.ts"),
+        await fs.writeFile(
+          "dist/p/" + path + "/" + fileName.replace(".idl", ".d.ts"),
           processed,
         );
       }
@@ -115,14 +128,22 @@ async function processAll4Test(root: string[]) {
   let objMetadata = await getExportFromDir("dist/p");
 
   objMetadata = await parseIncludeFromDir("dist/p", objMetadata);
+
+  objMetadata = await addConstantsWithMetadata(objMetadata);
+
   await fs.writeFile("./metadata.json", JSON.stringify(objMetadata));
+  await processImport2TSFromObjMetadata(objMetadata);
+
+  await writeComponents("./dist/p/index.d.ts", objMetadata);
 }
 
 function main() {
   {
-    processAll4Test([
-      "../nyanrus_Floorp/xpcom",
-      "../nyanrus_Floorp/netwerk/mime",
+    processAll4Test("../nyanrus_Floorp", [
+      "xpcom",
+      "netwerk/mime",
+      "layout",
+      "js",
     ]);
   }
   {

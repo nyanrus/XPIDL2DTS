@@ -87,3 +87,4 @@ enumerate: (aElemIID: any,///in
 
 ///EXPORT {"type":[],"interface":["nsIArray"]}
 ///UNRESOLVED_TYPES ["nsISupports","nsISimpleEnumerator"]
+///CONSTANTS {}

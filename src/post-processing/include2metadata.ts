@@ -1,6 +1,6 @@
 import * as fs from "fs/promises";
 import fg from "fast-glob";
-import { ObjMetadata } from "./defines.js";
+import { ObjMetadata } from "../defines.js";
 
 /**
  * parse Include to list like
@@ -69,7 +69,8 @@ export async function parseIncludeFromDir(
       console.log(imports);
     }
     console.log(
-      objMetadata[file.replace("\\", "/").split("/").slice(-1).join("")],
+      file.replace("\\", "/").split("/").slice(-1).join("") +
+        objMetadata[file.replace("\\", "/").split("/").slice(-1).join("")],
     );
     objMetadata[file.replace("\\", "/").split("/").slice(-1).join("")].imports =
       [...new Set(imports)];
