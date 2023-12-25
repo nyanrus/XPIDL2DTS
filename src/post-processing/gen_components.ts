@@ -1,5 +1,5 @@
 import path from "path";
-import { ObjMetadata } from "../defines.js";
+import { AUTO_GENERATED_COMMENT, ObjMetadata } from "../defines.js";
 import * as fs from "fs/promises";
 
 export async function writeComponents(
@@ -63,6 +63,7 @@ export async function writeComponents(
     imports += import_interface;
   }
   let src = `
+${AUTO_GENERATED_COMMENT}
 ${imports}
 
 export interface hasLfoName {
@@ -122,10 +123,12 @@ interface Components extends _nsIXPCComponents {
   readonly classes: Components_Classes;
 }
 
-declare var Components: Components;
-declare var Cc = Components.classes;
-declare var Cu = Components.utils;
-declare var Ci = Components.interfaces;
+declare global {
+  const Components: Components;
+  const Cc: Components_Classes;
+  const Cu: typeof Components_Utils;
+  const Ci: lfoCi;
+}
   `;
   fs.writeFile(filePath, src.trim());
 }

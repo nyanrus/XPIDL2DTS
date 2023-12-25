@@ -13,6 +13,7 @@ import {
   resetConstants,
 } from "./src/post-processing/constants2list.js";
 import { addConstantsWithMetadata } from "./src/post-processing/constants2metadata.js";
+import { AUTO_GENERATED_COMMENT } from "./src/defines.js";
 
 function process(src: string): string {
   resetUnresolvedTypes();
@@ -101,17 +102,9 @@ async function processAll4Test(root: string, dirs: string[]) {
 
       await fs.writeFile(
         "dist/pp/" + path + "/" + fileName.replace(".idl", ".d.ts"),
-        preprocessed,
+        AUTO_GENERATED_COMMENT + "\n" + preprocessed,
       );
       const processed = process(preprocessed);
-
-      if (_file.includes("nsIArray.idl")) {
-        await fs.writeFile(
-          "nsIArray.d.ts",
-
-          processed,
-        );
-      }
 
       //console.log(path);
       if (!isEmpty(processed)) {
@@ -120,7 +113,7 @@ async function processAll4Test(root: string, dirs: string[]) {
         });
         await fs.writeFile(
           "dist/p/" + path + "/" + fileName.replace(".idl", ".d.ts"),
-          processed,
+          AUTO_GENERATED_COMMENT + "\n" + processed,
         );
       }
     }
