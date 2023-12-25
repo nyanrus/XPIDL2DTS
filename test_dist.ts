@@ -9,12 +9,18 @@ import {
   nsIXPCComponents_Utils,
 } from "./dist/p/js/xpconnect/idl/xpccomponents.js";
 
-import { Components } from "./dist/p/index.js";
+import { Components, Cc, Ci } from "./dist/p/index.js";
+
+Cc["@mozilla"].createInstance(Ci.nsIArray);
+////import type { getKey } from "./dist/p/index.js";
+
+Components.interfaces.nsIFile;
+
+//type a = getKey<nsIArray>;\
+Components.interfaces.nsIArray.$name;
 
 const arr = Components.classes["@mozilla"].createInstance(
   Components.interfaces.nsIArray,
 );
-
-arr.Components.interfaces.nsIMIMEInfo.alwaysAsk;
 
 Components.interfaces.nsIArray;

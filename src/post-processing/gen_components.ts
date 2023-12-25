@@ -13,9 +13,9 @@ export async function writeComponents(
   let local_classes = "";
 
   for (const [_, meta] of Object.entries(objMetadata)) {
-    let inner = "";
     let import_interface = "import type {";
     for (let _interface of meta.interface) {
+      let inner = "";
       //_interface = _interface.replace(";", "");
       import_interface += `${_interface} as _${_interface},`;
 
@@ -49,11 +49,12 @@ export async function writeComponents(
             inner += `readonly ${name_constant} = ${eval(value_constant)};\n`;
           }
         }
+      inner += `/**\n* @deprecated this property not available on runtime\n*/\nreadonly $name : "${_interface}";\n`;
 
-      local_classes += `//@ts-ignore error because ts(2420)\nabstract class ${_interface} {${inner}};\n`;
+      local_classes += `class ${_interface} implements hasLfoName {${inner}};\n`;
 
       //exports += `//@ts-ignore error because ts(2420)\nabstract class ${_interface} implements _${_interface} {${inner}}\n`;
-      exports += `${_interface} : lfoLocal.${_interface};\n`;
+      exports += `/**\n* @type {_${_interface}}\n*/\n${_interface} : lfoLocal.${_interface};\n`;
       type_exports += `${_interface} : _${_interface};\n`;
     }
     import_interface += `} from "./${path
@@ -64,55 +65,67 @@ export async function writeComponents(
   let src = `
 ${imports}
 
+export interface hasLfoName {
+  $name: keyof Components_Interfaces,
+}
+
 export namespace lfoLocal {
 ${local_classes}
 }
 
 
 export interface Components_Interfaces extends _nsIXPCComponents_Interfaces {
-  ${type_exports}
+${type_exports}
 }
 
-export interface lfoCi {
-  ${exports}
+export interface lfoCi extends _nsIXPCComponents_Interfaces {
+/**
+ * @deprecated Only for extends nsIXPCComponents_Interfaces
+ */
+QueryInterface: (
+  aIID: any, ///in
+) => object;
+${exports}
 }
 
 declare var Components_Utils: _nsIXPCComponents_Utils;
 
-type lfoCi2Type<
-  T,
-  I extends Components_Interfaces,
-  L extends lfoCi,
-  K extends keyof L,
-> = T extends L[K] ? I[K] : unknown;
-
-interface _lfoClasses {
-  createInstance: <
-    K extends keyof Components_Interfaces,
-    V extends lfoCi[K],
-    R extends lfoCi2Type<V>,
-  >(
+interface _lfoClass {
+  createInstance: <I extends Components_Interfaces, V extends hasLfoName>(
     aClass: V, ///in
-  ) => R;
+  ) => I[V["$name"]];
 
-  getService: <
-    K extends keyof Components_Interfaces,
-    V extends lfoCi[K],
-    R extends lfoCi2Type<V>,
-  >(
+  getService: <I extends Components_Interfaces, V extends hasLfoName>(
     aClass: V, ///in
-  ) => R;
+  ) => I[V["$name"]];
+}
+
+interface Components_Classes extends _nsIXPCComponents_Classes {
+  [key: \`@\${string}\`]: _lfoClass;
+  /**
+   * @deprecated Only for extends nsIXPCComponents_Classes
+   */
+  QueryInterface: (
+    aIID: any, ///in
+  ) => object;
 }
 
 interface Components extends _nsIXPCComponents {
+  /**
+   * @deprecated Only for extends nsIXPCComponents
+   */
+  QueryInterface: (
+    aIID: any, ///in
+  ) => object;
   readonly interfaces: lfoCi;
   readonly utils: typeof Components_Utils;
-  readonly classes: { [x: string]: _lfoClasses };
+  readonly classes: Components_Classes;
 }
 
 declare var Components: Components;
-
-
+declare var Cc = Components.classes;
+declare var Cu = Components.utils;
+declare var Ci = Components.interfaces;
   `;
   fs.writeFile(filePath, src.trim());
 }
