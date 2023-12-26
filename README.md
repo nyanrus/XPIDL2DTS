@@ -1,7 +1,7 @@
 # XPIDL2DTS
 
-Firefox's XPCOM has no types!  
-So, I made tool of convert XPIDL(XPCOM's IDL files) to d.ts!
+Firefox's XPCOM has no type auto-complete in js!  
+So, I made a tool to convert XPIDL(XPCOM's IDL files) to d.ts!
 
 this tool's purpose is to make better firefox's js development esp. [Floorp-Projects/Floorp](https://github.com/Floorp-Projects/Floorp)
 
