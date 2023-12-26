@@ -187,7 +187,7 @@ export function processFunction(line: string, attr: Attribute | null): string {
 function processCENUM(line: string): string {
   const tokens = line.split(" ");
   //0 is cenum keyword
-  const name = tokens[1];
+  const name = tokens[1].replace(":", "");
   //2 is `:`
   const bytenum = tokens[3];
   const tokens_inner = tokens.slice(4).join("").replaceAll(/[{}]/g, "");
