@@ -1,20 +1,8 @@
 import fg from "fast-glob";
 import * as fs from "fs/promises";
 import { Metadata, ObjMetadata } from "../defines.js";
-import { getConstants } from "./constants2list.js";
 
 export function getExportJSON(src: string): Metadata | undefined {
-  // console.log(
-  //   "export:" +
-  //     src
-  //       .split("\n")
-  //       .filter((v) => {
-  //         return v.includes("///EXPORT");
-  //       })
-  //       .join("")
-  //       .replace("///EXPORT", "")
-  //       .trim(),
-  // );
   if (
     src
       .split("\n")

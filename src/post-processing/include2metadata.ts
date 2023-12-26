@@ -36,7 +36,7 @@ export async function parseInclude(
   //`///INCLUDE #include "[FILENAME]"`
   for (const line of lines_include) {
     const fileName = line.split('"')[1].replace(".idl", ".d.ts");
-    //console.log(fileName);
+    console.log(fileName);
     //console.log(JSON.stringify(exports[fileName]));
     //console.log("exports:" + exports[fileName]["filePath"]);
     //const filePath =
@@ -65,9 +65,9 @@ export async function parseIncludeFromDir(
     }
     console.log(fileName);
     const imports = await parseIncludeFromFile(file, objMetadata);
-    if (imports.includes("nsISupports.d.ts")) {
-      console.log(imports);
-    }
+    // if (imports.includes("nsISupports.d.ts")) {
+    //   console.log(imports);
+    // }
     console.log(
       file.replace("\\", "/").split("/").slice(-1).join("") +
         objMetadata[file.replace("\\", "/").split("/").slice(-1).join("")],

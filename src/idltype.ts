@@ -74,16 +74,6 @@ export function IDLType2TS(str: string): string {
 }
 
 export function getUnresolvedTypes(): string[] {
-  // if (resolvedTypes.length !== 0) {
-  //   throw Error(
-  //     JSON.stringify(resolvedTypes) +
-  //       JSON.stringify(
-  //         unresolvedTypes.filter((v) => {
-  //           return !resolvedTypes.includes(v);
-  //         }),
-  //       ),
-  //   );
-  // }
   return [
     ...new Set(
       unresolvedTypes.filter((v) => {

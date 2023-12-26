@@ -34,14 +34,18 @@ export function preprocess(src: string): string {
     //console.log("START\n" + src.slice(index) + "\nEND\n");
     //* MULTICOMMENT
     if (src.startsWith("/*", index)) {
-      const idx_end_multicomment = src.indexOf("*/\n", index);
-      if (idx_end_multicomment === -1) {
-        buf += src.slice(index);
-        break;
+      const idx_end_multicomment = src.indexOf("*/", index);
+      // if (idx_end_multicomment === -1) {
+      //   buf += src.slice(index);
+      //   break;
+      // }
+      buf += src.slice(index, idx_end_multicomment + 2);
+      index = idx_end_multicomment + 2;
+      if (src[index] === "\n") {
+        index += 1;
       }
-      buf += src.slice(index, idx_end_multicomment + 3);
+      buf += "\n";
       //console.log(src.slice(index, idx_end_multicomment + 3));
-      index = idx_end_multicomment + 3;
     }
     //* SINGLECOMMENT
     else if (src.startsWith("//", index)) {
@@ -82,6 +86,7 @@ export function preprocess(src: string): string {
       buf +=
         src
           .slice(index, idx_end + 3)
+          .replaceAll(/\/\*.*?\*\//g, "")
           .replaceAll(/\/\/.*\n/g, "") //TODO: process comments in cenum
           .replaceAll(/[ ]+|\n/g, " ")
           .trim() + "\n";
@@ -100,6 +105,15 @@ export function preprocess(src: string): string {
       //console.log(`arr_index : ${arr_idx}`);
 
       idx_end = arr_idx[0] !== -1 ? arr_idx[0] : arr_idx[1];
+
+      const idx_multicomment = src.indexOf("/*", index);
+      const idx_singlecomment = src.indexOf("//", index);
+      if (idx_multicomment < idx_end && idx_multicomment !== -1) {
+        idx_end = idx_multicomment - 1;
+      }
+      if (idx_singlecomment < idx_end && idx_singlecomment !== -1) {
+        idx_end = idx_singlecomment - 1;
+      }
 
       //console.log(idx_end);
 

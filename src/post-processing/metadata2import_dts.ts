@@ -16,16 +16,37 @@ export async function processImport2TSFromFile(
       return JSON.parse(v.replace("///UNRESOLVED_TYPES ", ""));
     })[0] as string[];
 
+  let resolved_types: string[] = [];
+
   const imports = objMetadata[fileName].imports;
 
   let ret_import: { [x: string]: string[] } = {};
   for (const i of imports) {
     const _interface = objMetadata[i].interface;
     const _type = objMetadata[i].type;
-    ret_import[i] = unresolved_types.filter((v) => {
+    const _resolved = unresolved_types.filter((v) => {
       return _interface.includes(v) || _type.includes(v);
     });
+    ret_import[i] = _resolved;
+    resolved_types.push(..._resolved);
   }
+  if (unresolved_types.length !== resolved_types.length) {
+    const _unresolved = unresolved_types.filter((v) => {
+      return !resolved_types.includes(v);
+    });
+    for (const [idx, elem] of Object.entries(objMetadata)) {
+      if (unresolved_types.length === resolved_types.length) {
+        break;
+      }
+      const _resolve = _unresolved.filter((v) => {
+        return elem.interface.includes(v) || elem.type.includes(v);
+      });
+      if (_resolve.length !== 0) {
+        ret_import[idx] = _resolve;
+      }
+    }
+  }
+
   return ret_import;
 }
 

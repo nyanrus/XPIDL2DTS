@@ -23,31 +23,39 @@ export async function writeComponents(
         for (const [name_constant, value_constant] of Object.entries(
           meta.constants[_interface],
         )) {
-          if (value_constant.includes("|")) {
-            function process_bit_or(value_constant: string): string {
-              console.log(value_constant);
-              return eval(
-                value_constant
-                  .replaceAll(" ", "")
-                  .split("|")
-                  .map((v) => {
-                    const _tmp = meta.constants[_interface][v];
-                    if (_tmp.includes("|")) {
-                      return process_bit_or(_tmp);
-                    } else {
-                      return _tmp;
-                    }
-                  })
-                  .join("|"),
-              );
-            }
-            inner += `readonly ${name_constant} = ${process_bit_or(
-              value_constant,
-            )};\n`;
-          } else {
-            //TODO 危険かも
-            inner += `readonly ${name_constant} = ${eval(value_constant)};\n`;
+          // if (value_constant.includes("|")) {
+          //   function process_bit_or(value_constant: string): string {
+          //     console.log(value_constant);
+          //     return eval(
+          //       value_constant
+          //         .replaceAll(" ", "")
+          //         .split("|")
+          //         .map((v) => {
+          //           const _tmp = meta.constants[_interface][v];
+          //           if (_tmp.includes("|")) {
+          //             return process_bit_or(_tmp);
+          //           } else {
+          //             return _tmp;
+          //           }
+          //         })
+          //         .join("|"),
+          //     );
+          //   }
+          //   inner += `readonly ${name_constant} = ${process_bit_or(
+          //     value_constant,
+          //   )};\n`;
+          // } else {
+          //TODO 危険かも
+          let toEval = "";
+          for (const [idx, elem] of Object.entries(
+            meta.constants[_interface],
+          )) {
+            toEval += `const ${idx} = ${elem};`;
           }
+          inner += `readonly ${name_constant} = ${eval(
+            toEval + value_constant,
+          )};\n`;
+          //}
         }
       inner += `/**\n* @deprecated this property not available on runtime\n*/\nreadonly $name : "${_interface}";\n`;
 
