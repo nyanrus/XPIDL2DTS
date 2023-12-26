@@ -1,6 +1,6 @@
 {
-  "name": "XPIDL2DTS",
-  "version": "1.0.0",
+  "name": "xpidl2dts",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,5 +21,6 @@
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
-  "type": "module"
+  "type": "module",
+  "private": "true"
 }
