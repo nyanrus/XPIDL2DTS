@@ -79,7 +79,11 @@ export async function processAll4Test(
 ) {
 	console.log("processing");
 
-	await fs.rmdir(dist, { recursive: true });
+	try {
+		await fs.access(dist);
+		await fs.rmdir(dist, { recursive: true });
+	} catch {}
+
 	const files = await fg(
 		dirs.map((v) => {
 			return `${root}/${v}/**/*.idl`;
