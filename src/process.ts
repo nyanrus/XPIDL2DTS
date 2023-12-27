@@ -1,21 +1,21 @@
+import fg from "fast-glob";
 import * as fs from "fs/promises";
-import * as fg from "fast-glob";
-import { preprocess } from "./src/preprocess.js";
-import { isEmpty } from "./src/post-processing/clean_empty_dts.js";
-import { processLine } from "./src/funcs.js";
-import { getExportFromDir } from "./src/post-processing/export2metadata.js";
-import { getUnresolvedTypes, resetUnresolvedTypes } from "./src/idltype.js";
-import { parseIncludeFromDir } from "./src/post-processing/include2metadata.js";
-import { processImport2TSFromObjMetadata } from "./src/post-processing/metadata2import_dts.js";
-import { writeComponents } from "./src/post-processing/gen_components.js";
+import { AUTO_GENERATED_COMMENT } from "./defines.js";
+import { processLine } from "./funcs.js";
+import { resetUnresolvedTypes, getUnresolvedTypes } from "./idltype.js";
+import { isEmpty } from "./post-processing/clean_empty_dts.js";
 import {
-  getConstants,
   resetConstants,
-} from "./src/post-processing/constants2list.js";
-import { addConstantsWithMetadata } from "./src/post-processing/constants2metadata.js";
-import { AUTO_GENERATED_COMMENT } from "./src/defines.js";
+  getConstants,
+} from "./post-processing/constants2list.js";
+import { addConstantsWithMetadata } from "./post-processing/constants2metadata.js";
+import { getExportFromDir } from "./post-processing/export2metadata.js";
+import { writeComponents } from "./post-processing/gen_components.js";
+import { parseIncludeFromDir } from "./post-processing/include2metadata.js";
+import { processImport2TSFromObjMetadata } from "./post-processing/metadata2import_dts.js";
+import { preprocess } from "./preprocess.js";
 
-function process(src: string): string {
+export function process(src: string): string {
   resetUnresolvedTypes();
   resetConstants();
   let buf = "";
@@ -72,11 +72,11 @@ function process(src: string): string {
  * @param root firefox root
  * @param dirs dirs to read
  */
-async function processAll4Test(root: string, dirs: string[]) {
+export async function processAll4Test(root: string, dirs: string[]) {
   console.log("processing");
 
   await fs.rmdir("./dist", { recursive: true });
-  const files = await fg.default(
+  const files = await fg(
     dirs.map((v) => {
       return root + "/" + v + "/" + "**/*.idl";
     }),
@@ -133,25 +133,3 @@ async function processAll4Test(root: string, dirs: string[]) {
 
   await writeComponents("./dist/p/index.d.ts", objMetadata);
 }
-
-function main() {
-  {
-    processAll4Test("../nyanrus_Floorp", [
-      "xpcom",
-      "netwerk",
-      "dom/interfaces/security",
-      "dom/base",
-      "dom/interfaces/base",
-      "uriloader",
-      "services",
-      "widget",
-      "image",
-      "layout",
-      "js",
-      "toolkit",
-      "caps",
-    ]);
-  }
-}
-
-main();
