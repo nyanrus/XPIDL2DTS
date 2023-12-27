@@ -3,74 +3,74 @@ import { AUTO_GENERATED_COMMENT, ObjMetadata } from "../defines.js";
 import * as fs from "fs/promises";
 
 export async function writeComponents(
-  filePath: string,
-  objMetadata: ObjMetadata,
+	filePath: string,
+	objMetadata: ObjMetadata,
 ) {
-  let imports = "";
-  let exports = "";
-  let type_exports = "";
+	let imports = "";
+	let exports = "";
+	let type_exports = "";
 
-  let local_classes = "";
+	let local_classes = "";
 
-  for (const [_, meta] of Object.entries(objMetadata)) {
-    let import_interface = "import type {";
-    for (let _interface of meta.interface) {
-      let inner = "";
-      //_interface = _interface.replace(";", "");
-      import_interface += `${_interface} as _${_interface},`;
+	for (const [_, meta] of Object.entries(objMetadata)) {
+		let import_interface = "import type {";
+		for (let _interface of meta.interface) {
+			let inner = "";
+			//_interface = _interface.replace(";", "");
+			import_interface += `${_interface} as _${_interface},`;
 
-      if (_interface in meta.constants)
-        for (const [name_constant, value_constant] of Object.entries(
-          meta.constants[_interface],
-        )) {
-          // if (value_constant.includes("|")) {
-          //   function process_bit_or(value_constant: string): string {
-          //     console.log(value_constant);
-          //     return eval(
-          //       value_constant
-          //         .replaceAll(" ", "")
-          //         .split("|")
-          //         .map((v) => {
-          //           const _tmp = meta.constants[_interface][v];
-          //           if (_tmp.includes("|")) {
-          //             return process_bit_or(_tmp);
-          //           } else {
-          //             return _tmp;
-          //           }
-          //         })
-          //         .join("|"),
-          //     );
-          //   }
-          //   inner += `readonly ${name_constant} = ${process_bit_or(
-          //     value_constant,
-          //   )};\n`;
-          // } else {
-          //TODO 危険かも
-          let toEval = "";
-          for (const [idx, elem] of Object.entries(
-            meta.constants[_interface],
-          )) {
-            toEval += `const ${idx} = ${elem};`;
-          }
-          inner += `readonly ${name_constant} = ${eval(
-            toEval + value_constant,
-          )};\n`;
-          //}
-        }
-      inner += `/**\n* @deprecated this property not available on runtime\n*/\nreadonly $name : "${_interface}";\n`;
+			if (_interface in meta.constants)
+				for (const [name_constant, value_constant] of Object.entries(
+					meta.constants[_interface],
+				)) {
+					// if (value_constant.includes("|")) {
+					//   function process_bit_or(value_constant: string): string {
+					//     console.log(value_constant);
+					//     return eval(
+					//       value_constant
+					//         .replaceAll(" ", "")
+					//         .split("|")
+					//         .map((v) => {
+					//           const _tmp = meta.constants[_interface][v];
+					//           if (_tmp.includes("|")) {
+					//             return process_bit_or(_tmp);
+					//           } else {
+					//             return _tmp;
+					//           }
+					//         })
+					//         .join("|"),
+					//     );
+					//   }
+					//   inner += `readonly ${name_constant} = ${process_bit_or(
+					//     value_constant,
+					//   )};\n`;
+					// } else {
+					//TODO 危険かも
+					let toEval = "";
+					for (const [idx, elem] of Object.entries(
+						meta.constants[_interface],
+					)) {
+						toEval += `const ${idx} = ${elem};`;
+					}
+					inner += `readonly ${name_constant} = ${eval(
+						toEval + value_constant,
+					)};\n`;
+					//}
+				}
+			inner += `/**\n* @deprecated this property not available on runtime\n*/\nreadonly $name : "${_interface}";\n`;
 
-      local_classes += `class ${_interface} implements hasLfoName {${inner}};\n`;
+			local_classes += `class ${_interface} implements hasLfoName {${inner}};\n`;
 
-      //exports += `//@ts-ignore error because ts(2420)\nabstract class ${_interface} implements _${_interface} {${inner}}\n`;
-      exports += `/**\n* @type {_${_interface}}\n*/\n${_interface} : lfoLocal.${_interface};\n`;
-      type_exports += `${_interface} : _${_interface};\n`;
-    }
-    import_interface += `} from "./${path
-      .relative(filePath.split("/").slice(0, -1).join("/"), meta.filePath)
-      .replaceAll(/\\/g, "/")}"\n`;
-    imports += import_interface;
-  }
-  let src = `
+			//exports += `//@ts-ignore error because ts(2420)\nabstract class ${_interface} implements _${_interface} {${inner}}\n`;
+			exports += `/**\n* @type {_${_interface}}\n*/\n${_interface} : lfoLocal.${_interface};\n`;
+			type_exports += `${_interface} : _${_interface};\n`;
+		}
+		import_interface += `} from "./${path
+			.relative(filePath.split("/").slice(0, -1).join("/"), meta.filePath)
+			.replaceAll(/\\/g, "/")}"\n`;
+		imports += import_interface;
+	}
+	const src = `
 ${AUTO_GENERATED_COMMENT}
 ${imports}
 
@@ -138,5 +138,5 @@ declare global {
   const Ci: lfoCi;
 }
   `;
-  fs.writeFile(filePath, src.trim());
+	fs.writeFile(filePath, src.trim());
 }

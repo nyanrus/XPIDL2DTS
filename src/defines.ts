@@ -2,51 +2,51 @@
  * XPIDL Attribute that like [A,B,...,Z]
  */
 export class Attribute {
-  values: string[];
-  private constructor(values: string[]) {
-    this.values = values;
-  }
-  /**
-   * Make line to Attribute
-   * @param line line that including XPIDL Attribute
-   * @returns separated Attribute and later string
-   */
-  static fromLine(line: string): [Attribute, string] {
-    const arr = line
-      .slice(1, line.indexOf("]"))
-      .split(",")
-      .map((v) => {
-        return v.trim();
-      });
+	values: string[];
+	private constructor(values: readonly string[]) {
+		this.values = [...values];
+	}
+	/**
+	 * Make line to Attribute
+	 * @param line line that including XPIDL Attribute
+	 * @returns separated Attribute and later string
+	 */
+	static fromLine(line: string): [Attribute, string] {
+		const arr = line
+			.slice(1, line.indexOf("]"))
+			.split(",")
+			.map((v) => {
+				return v.trim();
+			});
 
-    //console.log(_out);
-    const _out = line.slice(line.indexOf("]") + 1);
-    const attribute = new Attribute(arr);
-    //console.log(`ATTRIBUTE: ${attribute.values}`);
-    return [attribute, _out.trimStart()];
-  }
-  /**
-   * Attribute to string
-   * @returns stringifyed Attribute
-   */
-  toLine(): string {
-    return `[${this.values.join(", ")}]`;
-  }
+		//console.log(_out);
+		const _out = line.slice(line.indexOf("]") + 1);
+		const attribute = new Attribute(arr);
+		//console.log(`ATTRIBUTE: ${attribute.values}`);
+		return [attribute, _out.trimStart()];
+	}
+	/**
+	 * Attribute to string
+	 * @returns stringifyed Attribute
+	 */
+	toLine(): string {
+		return `[${this.values.join(", ")}]`;
+	}
 }
 
 export type Constants = {
-  [interfaceName: string]: { [constantName: string]: string };
+	[interfaceName: string]: { [constantName: string]: string };
 };
 
 export interface Metadata {
-  type: string[];
-  interface: string[];
-  filePath: string;
-  imports: string[];
-  constants: Constants;
+	type: string[];
+	interface: string[];
+	filePath: string;
+	imports: string[];
+	constants: Constants;
 }
 
-export type ObjMetadata = { [x: string]: Metadata };
+export type ObjMetadata = Map<string, Metadata>;
 
 export const AUTO_GENERATED_COMMENT = `/**
 * DO NOT EDIT

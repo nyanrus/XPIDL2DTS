@@ -12,7 +12,7 @@ pnpm i
 ```
 to install libraries and
 
-enter FIREFOX_ROOT to index.ts like
+enter FIREFOX_ROOT to main.ts like
 ```ts
 function main() {
   processAll4Test("[[FIREFOX_ROOT]]", [
@@ -27,7 +27,7 @@ function main() {
 and run!
 
 ```bash
-pnpm tsx index.ts
+pnpm tsx main.ts
 ```
 
 and you will get `dist` folder that includes `pp` (preprocessed) and `p`(processed)  
@@ -37,11 +37,18 @@ If you want to format to these dts,
 You can type
 
 ```bash
+pnpm biome format --write ./dist/p
+```
+
+or you can use prettier and/or eslint if you install  
+and use like
+
+```bash
 pnpm prettier --write 'dist/p/**/*.d.ts' --ignore-path ""
 ```
 
 (you should include `--ignore-path ""` because prettier ignores files that git ignores)  
-or 
+or
 
 ```bash
 pnpm eslint --fix ./dist/p/**/*.d.ts
