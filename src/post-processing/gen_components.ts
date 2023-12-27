@@ -12,9 +12,9 @@ export async function writeComponents(
 
 	let local_classes = "";
 
-	for (const [_, meta] of Object.entries(objMetadata)) {
+	for (const [_, meta] of objMetadata.entries()) {
 		let import_interface = "import type {";
-		for (let _interface of meta.interface) {
+		for (const _interface of meta.interface) {
 			let inner = "";
 			//_interface = _interface.replace(";", "");
 			import_interface += `${_interface} as _${_interface},`;

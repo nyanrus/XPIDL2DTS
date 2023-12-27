@@ -134,12 +134,22 @@ export async function processAll4Test(
 		}
 	}
 	let objMetadata = await getExportFromDir(`${dist}/p`);
+	// await fs.writeFile(
+	// 	"./metadata1.json",
+	// 	JSON.stringify(Array.from(objMetadata.entries())),
+	// );
 
 	objMetadata = await parseIncludeFromDir(`${dist}/p`, objMetadata);
+	// await fs.writeFile(
+	// 	"./metadata2.json",
+	// 	JSON.stringify(Array.from(objMetadata.entries())),
+	// );
 
 	objMetadata = await addConstantsWithMetadata(objMetadata);
+	// await fs.writeFile(
+	// 	"./metadata3.json",
+	// 	JSON.stringify(Array.from(objMetadata.entries())),
+	// );
 	await processImport2TSFromObjMetadata(objMetadata);
 	await writeComponents(`${dist}/p/index.d.ts`, objMetadata);
-
-	//await fs.writeFile("./metadata.json", JSON.stringify(objMetadata));
 }

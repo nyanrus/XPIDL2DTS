@@ -34,7 +34,7 @@ export async function processImport2TSFromFile(
 		const _unresolved = unresolved_types.filter((v) => {
 			return !resolved_types.includes(v);
 		});
-		for (const [idx, elem] of Object.entries(objMetadata)) {
+		for (const [idx, elem] of objMetadata.entries()) {
 			if (unresolved_types.length === resolved_types.length) {
 				break;
 			}
@@ -53,7 +53,7 @@ export async function processImport2TSFromFile(
 export async function processImport2TSFromObjMetadata(
 	objMetadata: ObjMetadata,
 ) {
-	for (const [idx, meta] of Object.entries(objMetadata)) {
+	for (const [idx, meta] of objMetadata.entries()) {
 		const src = (await fs.readFile(meta.filePath)).toString();
 		const imports = await processImport2TSFromFile(src, idx, objMetadata);
 		const idx_include = src.indexOf("///INCLUDE");

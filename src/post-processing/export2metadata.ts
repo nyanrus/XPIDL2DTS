@@ -27,7 +27,7 @@ export function getExportJSON(src: string): Metadata | undefined {
 }
 
 export async function getExportFromDir(dir: string): Promise<ObjMetadata> {
-	const obj: ObjMetadata = new Map();
+	const obj = new Map<string, Metadata>();
 	const files = await fg([`${dir}/**/*.d.ts`], { dot: true });
 	for (const file of files) {
 		const fileName = file.replace("\\", "/").split("/").pop();
