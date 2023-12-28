@@ -92,7 +92,7 @@ export async function writeComponents(
 			.map((v) => {
 				return `_${v}`;
 			})
-			.join("|")};\n`;
+			.join("&")};\n`;
 	}
 	const src = `
 ${AUTO_GENERATED_COMMENT}
