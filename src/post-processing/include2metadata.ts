@@ -35,13 +35,16 @@ export async function parseInclude(
 	for (const line of lines_include) {
 		const fileName = line.split('"')[1].replace(".idl", ".d.ts");
 		console.log(fileName);
-		ret.push(
-			...(await parseIncludeFromFile(
-				objMetadata.get(fileName)!.filePath,
-				objMetadata,
-			)),
-		);
-		ret.push(fileName);
+		const filePath = objMetadata.get(fileName)?.filePath;
+		if (filePath) {
+			ret.push(
+				...(await parseIncludeFromFile(
+					objMetadata.get(fileName)?.filePath,
+					objMetadata,
+				)),
+			);
+			ret.push(fileName);
+		}
 	}
 	return [...new Set(ret)];
 }
